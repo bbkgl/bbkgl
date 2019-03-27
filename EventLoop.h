@@ -3,34 +3,37 @@
 
 #include <boost/noncopyable.hpp>
 #include <cassert>
-#include "Thread.h"
+#include <thread>
 
-namespace bbkgl
+// 该类不可拷贝
+class EventLoop : public boost::noncopyable
 {
-    class EventLoop : public boost::noncopyable
+public:
+    EventLoop();
+    ~EventLoop();
+
+    void Loop();
+
+    // 如果当前线程不是创建对象时的线程，就报错
+    void AssertInLoopThread()
     {
-    public:
-        EventLoop();
-        ~EventLoop();
-
-        void loop();
-
-        void assertInLoopThread()
+        if (!IsInLoopThread())
         {
-
+            AbortNotInLoopThread();
         }
+    }
 
-        bool isInLoopThread() const { return threadId_ == CurrentThread::; }
+    // 检查是否当前线程id和创建时记录的线程id是否相等
+    bool IsInLoopThread() const { return thread_id_ == std::this_thread::get_id(); }
 
-    private:
+private:
 
-        void abortNotInLoopThread();
+    void AbortNotInLoopThread();
 
-        bool looping_;
-        const pid_t threadId_;
+    bool looping_;
+    const std::thread::id thread_id_;
 
-    };
-}
+};
 
 
 #endif //BBKGL_EVENTLOOP_H

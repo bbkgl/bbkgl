@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/bbkgl/CLionProjects/bbkgl/EventLoop.cpp
+EventLoop.h
+/home/bbkgl/CLionProjects/bbkgl/EventLoop.h
+iostream
+-
+poll.h
+-
+
+/home/bbkgl/CLionProjects/bbkgl/EventLoop.h
+boost/noncopyable.hpp
+-
+cassert
+-
+thread
+-
+
+/home/bbkgl/CLionProjects/bbkgl/main.cpp
+iostream
+-
+unistd.h
+-
+thread
+-
+EventLoop.h
+/home/bbkgl/CLionProjects/bbkgl/EventLoop.h
+

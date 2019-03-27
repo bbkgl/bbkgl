@@ -12,3 +12,6 @@ include_directories(./)
 add_executable(bbkgl ${DIRSRCS})
 
 target_link_libraries(bbkgl)
+
+find_package(Threads REQUIRED)
+target_link_libraries(bbkgl Threads::Threads)
