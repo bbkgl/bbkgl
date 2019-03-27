@@ -9,7 +9,7 @@ aux_source_directory(. DIRSRCS)
 # Add header file include directories
 include_directories(./)
 
-add_executable(bbkgl ${DIRSRCS} Channel.cpp Channel.h)
+add_executable(bbkgl ${DIRSRCS} Channel.cpp Channel.h Poller.cpp Poller.h Timestamp.cpp Timestamp.h)
 
 target_link_libraries(bbkgl)
 

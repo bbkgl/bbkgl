@@ -6,6 +6,22 @@
 
 #IncludeRegexTransform: 
 
+/home/bbkgl/CLionProjects/bbkgl/Channel.cpp
+Channel.h
+/home/bbkgl/CLionProjects/bbkgl/Channel.h
+poll.h
+/home/bbkgl/CLionProjects/bbkgl/poll.h
+iostream
+-
+
+/home/bbkgl/CLionProjects/bbkgl/Channel.h
+boost/core/noncopyable.hpp
+-
+functional
+-
+EventLoop.h
+/home/bbkgl/CLionProjects/bbkgl/EventLoop.h
+
 /home/bbkgl/CLionProjects/bbkgl/EventLoop.cpp
 EventLoop.h
 /home/bbkgl/CLionProjects/bbkgl/EventLoop.h
@@ -20,6 +36,34 @@ boost/noncopyable.hpp
 cassert
 -
 thread
+-
+
+/home/bbkgl/CLionProjects/bbkgl/Poller.cpp
+Poller.h
+/home/bbkgl/CLionProjects/bbkgl/Poller.h
+
+/home/bbkgl/CLionProjects/bbkgl/Poller.h
+vector
+-
+boost/core/noncopyable.hpp
+-
+
+/home/bbkgl/CLionProjects/bbkgl/Timestamp.cpp
+Timestamp.h
+/home/bbkgl/CLionProjects/bbkgl/Timestamp.h
+sys/time.h
+-
+stdio.h
+-
+inttypes.h
+-
+boost/static_assert.hpp
+-
+
+/home/bbkgl/CLionProjects/bbkgl/Timestamp.h
+stdint.h
+-
+string
 -
 
 /home/bbkgl/CLionProjects/bbkgl/main.cpp

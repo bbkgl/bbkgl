@@ -6,6 +6,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/bbkgl/CLionProjects/bbkgl/Channel.cpp" "/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles/bbkgl.dir/Channel.cpp.o"
   "/home/bbkgl/CLionProjects/bbkgl/EventLoop.cpp" "/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles/bbkgl.dir/EventLoop.cpp.o"
+  "/home/bbkgl/CLionProjects/bbkgl/Poller.cpp" "/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles/bbkgl.dir/Poller.cpp.o"
+  "/home/bbkgl/CLionProjects/bbkgl/Timestamp.cpp" "/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles/bbkgl.dir/Timestamp.cpp.o"
   "/home/bbkgl/CLionProjects/bbkgl/main.cpp" "/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles/bbkgl.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

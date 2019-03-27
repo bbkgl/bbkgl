@@ -105,9 +105,57 @@ CMakeFiles/bbkgl.dir/EventLoop.cpp.o.provides: CMakeFiles/bbkgl.dir/EventLoop.cp
 CMakeFiles/bbkgl.dir/EventLoop.cpp.o.provides.build: CMakeFiles/bbkgl.dir/EventLoop.cpp.o
 
 
+CMakeFiles/bbkgl.dir/Poller.cpp.o: CMakeFiles/bbkgl.dir/flags.make
+CMakeFiles/bbkgl.dir/Poller.cpp.o: ../Poller.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/bbkgl.dir/Poller.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/bbkgl.dir/Poller.cpp.o -c /home/bbkgl/CLionProjects/bbkgl/Poller.cpp
+
+CMakeFiles/bbkgl.dir/Poller.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/bbkgl.dir/Poller.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bbkgl/CLionProjects/bbkgl/Poller.cpp > CMakeFiles/bbkgl.dir/Poller.cpp.i
+
+CMakeFiles/bbkgl.dir/Poller.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/bbkgl.dir/Poller.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bbkgl/CLionProjects/bbkgl/Poller.cpp -o CMakeFiles/bbkgl.dir/Poller.cpp.s
+
+CMakeFiles/bbkgl.dir/Poller.cpp.o.requires:
+
+.PHONY : CMakeFiles/bbkgl.dir/Poller.cpp.o.requires
+
+CMakeFiles/bbkgl.dir/Poller.cpp.o.provides: CMakeFiles/bbkgl.dir/Poller.cpp.o.requires
+	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/Poller.cpp.o.provides.build
+.PHONY : CMakeFiles/bbkgl.dir/Poller.cpp.o.provides
+
+CMakeFiles/bbkgl.dir/Poller.cpp.o.provides.build: CMakeFiles/bbkgl.dir/Poller.cpp.o
+
+
+CMakeFiles/bbkgl.dir/Timestamp.cpp.o: CMakeFiles/bbkgl.dir/flags.make
+CMakeFiles/bbkgl.dir/Timestamp.cpp.o: ../Timestamp.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/bbkgl.dir/Timestamp.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/bbkgl.dir/Timestamp.cpp.o -c /home/bbkgl/CLionProjects/bbkgl/Timestamp.cpp
+
+CMakeFiles/bbkgl.dir/Timestamp.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/bbkgl.dir/Timestamp.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/bbkgl/CLionProjects/bbkgl/Timestamp.cpp > CMakeFiles/bbkgl.dir/Timestamp.cpp.i
+
+CMakeFiles/bbkgl.dir/Timestamp.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/bbkgl.dir/Timestamp.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/bbkgl/CLionProjects/bbkgl/Timestamp.cpp -o CMakeFiles/bbkgl.dir/Timestamp.cpp.s
+
+CMakeFiles/bbkgl.dir/Timestamp.cpp.o.requires:
+
+.PHONY : CMakeFiles/bbkgl.dir/Timestamp.cpp.o.requires
+
+CMakeFiles/bbkgl.dir/Timestamp.cpp.o.provides: CMakeFiles/bbkgl.dir/Timestamp.cpp.o.requires
+	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/Timestamp.cpp.o.provides.build
+.PHONY : CMakeFiles/bbkgl.dir/Timestamp.cpp.o.provides
+
+CMakeFiles/bbkgl.dir/Timestamp.cpp.o.provides.build: CMakeFiles/bbkgl.dir/Timestamp.cpp.o
+
+
 CMakeFiles/bbkgl.dir/main.cpp.o: CMakeFiles/bbkgl.dir/flags.make
 CMakeFiles/bbkgl.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/bbkgl.dir/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/bbkgl.dir/main.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/bbkgl.dir/main.cpp.o -c /home/bbkgl/CLionProjects/bbkgl/main.cpp
 
 CMakeFiles/bbkgl.dir/main.cpp.i: cmake_force
@@ -133,6 +181,8 @@ CMakeFiles/bbkgl.dir/main.cpp.o.provides.build: CMakeFiles/bbkgl.dir/main.cpp.o
 bbkgl_OBJECTS = \
 "CMakeFiles/bbkgl.dir/Channel.cpp.o" \
 "CMakeFiles/bbkgl.dir/EventLoop.cpp.o" \
+"CMakeFiles/bbkgl.dir/Poller.cpp.o" \
+"CMakeFiles/bbkgl.dir/Timestamp.cpp.o" \
 "CMakeFiles/bbkgl.dir/main.cpp.o"
 
 # External object files for target bbkgl
@@ -140,10 +190,12 @@ bbkgl_EXTERNAL_OBJECTS =
 
 bbkgl: CMakeFiles/bbkgl.dir/Channel.cpp.o
 bbkgl: CMakeFiles/bbkgl.dir/EventLoop.cpp.o
+bbkgl: CMakeFiles/bbkgl.dir/Poller.cpp.o
+bbkgl: CMakeFiles/bbkgl.dir/Timestamp.cpp.o
 bbkgl: CMakeFiles/bbkgl.dir/main.cpp.o
 bbkgl: CMakeFiles/bbkgl.dir/build.make
 bbkgl: CMakeFiles/bbkgl.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable bbkgl"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable bbkgl"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/bbkgl.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -153,6 +205,8 @@ CMakeFiles/bbkgl.dir/build: bbkgl
 
 CMakeFiles/bbkgl.dir/requires: CMakeFiles/bbkgl.dir/Channel.cpp.o.requires
 CMakeFiles/bbkgl.dir/requires: CMakeFiles/bbkgl.dir/EventLoop.cpp.o.requires
+CMakeFiles/bbkgl.dir/requires: CMakeFiles/bbkgl.dir/Poller.cpp.o.requires
+CMakeFiles/bbkgl.dir/requires: CMakeFiles/bbkgl.dir/Timestamp.cpp.o.requires
 CMakeFiles/bbkgl.dir/requires: CMakeFiles/bbkgl.dir/main.cpp.o.requires
 
 .PHONY : CMakeFiles/bbkgl.dir/requires

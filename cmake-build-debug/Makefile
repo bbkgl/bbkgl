@@ -177,6 +177,60 @@ EventLoop.cpp.s:
 	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/EventLoop.cpp.s
 .PHONY : EventLoop.cpp.s
 
+Poller.o: Poller.cpp.o
+
+.PHONY : Poller.o
+
+# target to build an object file
+Poller.cpp.o:
+	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/Poller.cpp.o
+.PHONY : Poller.cpp.o
+
+Poller.i: Poller.cpp.i
+
+.PHONY : Poller.i
+
+# target to preprocess a source file
+Poller.cpp.i:
+	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/Poller.cpp.i
+.PHONY : Poller.cpp.i
+
+Poller.s: Poller.cpp.s
+
+.PHONY : Poller.s
+
+# target to generate assembly for a file
+Poller.cpp.s:
+	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/Poller.cpp.s
+.PHONY : Poller.cpp.s
+
+Timestamp.o: Timestamp.cpp.o
+
+.PHONY : Timestamp.o
+
+# target to build an object file
+Timestamp.cpp.o:
+	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/Timestamp.cpp.o
+.PHONY : Timestamp.cpp.o
+
+Timestamp.i: Timestamp.cpp.i
+
+.PHONY : Timestamp.i
+
+# target to preprocess a source file
+Timestamp.cpp.i:
+	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/Timestamp.cpp.i
+.PHONY : Timestamp.cpp.i
+
+Timestamp.s: Timestamp.cpp.s
+
+.PHONY : Timestamp.s
+
+# target to generate assembly for a file
+Timestamp.cpp.s:
+	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/Timestamp.cpp.s
+.PHONY : Timestamp.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -219,6 +273,12 @@ help:
 	@echo "... EventLoop.o"
 	@echo "... EventLoop.i"
 	@echo "... EventLoop.s"
+	@echo "... Poller.o"
+	@echo "... Poller.i"
+	@echo "... Poller.s"
+	@echo "... Timestamp.o"
+	@echo "... Timestamp.i"
+	@echo "... Timestamp.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
