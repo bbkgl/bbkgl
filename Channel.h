@@ -70,7 +70,7 @@ private:
     int        events_;
     // 当前活跃的IO事件，由EventLoop/Poller设置
     int        revents_;
-    // index由poll/epoll调用
+    // index由poll/epoll调用，表示的是在epoller的pfds_中的位置
     int        index_;
 
     EventCallback ReadCallback_;

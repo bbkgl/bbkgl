@@ -8,23 +8,42 @@
 #include <vector>
 #include <boost/core/noncopyable.hpp>
 #include "Timestamp.h"
+#include "EventLoop.h"
+#include "Channel.h"
+#include <map>
 
 // 前置声明
 class Channel;
+struct pollfd;
 
 class Poller : boost::noncopyable
 {
 public:
     using ChannelList = std::vector<Channel *>;
 
-    Poller();
+    Poller(EventLoop *loop);
     ~Poller();
-    
 
+    // 核心函数，委托内核检测
+    Timestamp Poll(int timeout_ms, ChannelList *active_channels);
+
+    // 更新Channel的事件
+    void UpdateChannel(Channel * channel);;
+
+    // 判断是不是在创建loop的线程里
+    void AssertInLoopThread() { owner_loop_->AssertInLoopThread(); }
 
 private:
+    //
+    void FillActiveChannels(int num_events, ChannelList *active_channels) const;
 
+    EventLoop *owner_loop_;
 
+    using PollFdList = std::vector<struct pollfd>;
+    using ChannelMap = std::map<int, Channel*>;
+
+    PollFdList pollfds_;
+    ChannelMap channels_;
 };
 
 
