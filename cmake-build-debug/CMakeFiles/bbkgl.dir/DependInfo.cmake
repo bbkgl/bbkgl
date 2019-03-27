@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/bbkgl/CLionProjects/bbkgl/Channel.cpp" "/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles/bbkgl.dir/Channel.cpp.o"
   "/home/bbkgl/CLionProjects/bbkgl/EventLoop.cpp" "/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles/bbkgl.dir/EventLoop.cpp.o"
   "/home/bbkgl/CLionProjects/bbkgl/main.cpp" "/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles/bbkgl.dir/main.cpp.o"
   )

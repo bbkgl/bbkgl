@@ -86,6 +86,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/bbkgl/CLionProjects/bbkgl/Channel.cpp">
+			<Option target="bbkgl"/>
+		</Unit>
+		<Unit filename="/home/bbkgl/CLionProjects/bbkgl/Channel.h">
+			<Option target="bbkgl"/>
+		</Unit>
 		<Unit filename="/home/bbkgl/CLionProjects/bbkgl/EventLoop.cpp">
 			<Option target="bbkgl"/>
 		</Unit>

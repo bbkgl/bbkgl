@@ -14,6 +14,9 @@ public:
 
     void Loop();
 
+    // 更新所在loop所在Channel的事件种类
+    void UpdateChannel();
+
     // 如果当前线程不是创建对象时的线程，就报错
     void AssertInLoopThread()
     {

@@ -123,6 +123,33 @@ bbkgl/fast:
 	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/build
 .PHONY : bbkgl/fast
 
+Channel.o: Channel.cpp.o
+
+.PHONY : Channel.o
+
+# target to build an object file
+Channel.cpp.o:
+	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/Channel.cpp.o
+.PHONY : Channel.cpp.o
+
+Channel.i: Channel.cpp.i
+
+.PHONY : Channel.i
+
+# target to preprocess a source file
+Channel.cpp.i:
+	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/Channel.cpp.i
+.PHONY : Channel.cpp.i
+
+Channel.s: Channel.cpp.s
+
+.PHONY : Channel.s
+
+# target to generate assembly for a file
+Channel.cpp.s:
+	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/Channel.cpp.s
+.PHONY : Channel.cpp.s
+
 EventLoop.o: EventLoop.cpp.o
 
 .PHONY : EventLoop.o
@@ -186,6 +213,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... bbkgl"
+	@echo "... Channel.o"
+	@echo "... Channel.i"
+	@echo "... Channel.s"
 	@echo "... EventLoop.o"
 	@echo "... EventLoop.i"
 	@echo "... EventLoop.s"
