@@ -3,4 +3,12 @@ project(bbkgl)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(bbkgl main.cpp)
+# Add the source in project root directory
+aux_source_directory(. DIRSRCS)
+
+# Add header file include directories
+include_directories(./)
+
+add_executable(bbkgl ${DIRSRCS})
+
+target_link_libraries(bbkgl)

@@ -6,5 +6,5 @@ CXX_FLAGS = -g   -std=gnu++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/bbkgl/CLionProjects/bbkgl/. 
+CXX_INCLUDES = -I/home/bbkgl/CLionProjects/bbkgl/. -I/home/bbkgl/CLionProjects/bbkgl/./base -I/home/bbkgl/CLionProjects/bbkgl/./thread 
 

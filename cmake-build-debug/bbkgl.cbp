@@ -44,6 +44,7 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
+					<Add directory="/home/bbkgl/CLionProjects/bbkgl/."/>
 					<Add directory="/usr/include/c++/5"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
 					<Add directory="/usr/include/c++/5/backward"/>
@@ -67,6 +68,7 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
+					<Add directory="/home/bbkgl/CLionProjects/bbkgl/."/>
 					<Add directory="/usr/include/c++/5"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
 					<Add directory="/usr/include/c++/5/backward"/>
@@ -84,6 +86,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/bbkgl/CLionProjects/bbkgl/EventLoop.cpp">
+			<Option target="bbkgl"/>
+		</Unit>
+		<Unit filename="/home/bbkgl/CLionProjects/bbkgl/EventLoop.h">
+			<Option target="bbkgl"/>
+		</Unit>
 		<Unit filename="/home/bbkgl/CLionProjects/bbkgl/main.cpp">
 			<Option target="bbkgl"/>
 		</Unit>

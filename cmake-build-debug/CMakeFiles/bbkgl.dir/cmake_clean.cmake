@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/bbkgl.dir/EventLoop.cpp.o"
   "CMakeFiles/bbkgl.dir/main.cpp.o"
   "bbkgl.pdb"
   "bbkgl"

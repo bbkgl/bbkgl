@@ -1,0 +1,2 @@
+/usr/bin/ar qc libhello.a  CMakeFiles/hello.dir/Exception.cc.o CMakeFiles/hello.dir/Thread.cc.o CMakeFiles/hello.dir/ThreadPool.cc.o
+/usr/bin/ranlib libhello.a

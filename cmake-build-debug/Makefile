@@ -123,6 +123,33 @@ bbkgl/fast:
 	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/build
 .PHONY : bbkgl/fast
 
+EventLoop.o: EventLoop.cpp.o
+
+.PHONY : EventLoop.o
+
+# target to build an object file
+EventLoop.cpp.o:
+	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/EventLoop.cpp.o
+.PHONY : EventLoop.cpp.o
+
+EventLoop.i: EventLoop.cpp.i
+
+.PHONY : EventLoop.i
+
+# target to preprocess a source file
+EventLoop.cpp.i:
+	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/EventLoop.cpp.i
+.PHONY : EventLoop.cpp.i
+
+EventLoop.s: EventLoop.cpp.s
+
+.PHONY : EventLoop.s
+
+# target to generate assembly for a file
+EventLoop.cpp.s:
+	$(MAKE) -f CMakeFiles/bbkgl.dir/build.make CMakeFiles/bbkgl.dir/EventLoop.cpp.s
+.PHONY : EventLoop.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -159,6 +186,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... bbkgl"
+	@echo "... EventLoop.o"
+	@echo "... EventLoop.i"
+	@echo "... EventLoop.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

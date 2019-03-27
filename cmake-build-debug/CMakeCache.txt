@@ -200,6 +200,15 @@ bbkgl_BINARY_DIR:STATIC=/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug
 //Value Computed by CMake
 bbkgl_SOURCE_DIR:STATIC=/home/bbkgl/CLionProjects/bbkgl
 
+//Dependencies for target
+hello_LIB_DEPENDS:STATIC=
+
+//Dependencies for the target
+muduo_base_LIB_DEPENDS:STATIC=general;pthread;general;rt;
+
+//Dependencies for target
+thread_LIB_DEPENDS:STATIC=
+
 
 ########################
 # INTERNAL cache entries
