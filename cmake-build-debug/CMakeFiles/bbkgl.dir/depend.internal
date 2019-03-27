@@ -9,8 +9,11 @@ CMakeFiles/bbkgl.dir/EventLoop.cpp.o
  /home/bbkgl/CLionProjects/bbkgl/EventLoop.cpp
  /home/bbkgl/CLionProjects/bbkgl/EventLoop.h
 CMakeFiles/bbkgl.dir/Poller.cpp.o
+ /home/bbkgl/CLionProjects/bbkgl/Channel.h
+ /home/bbkgl/CLionProjects/bbkgl/EventLoop.h
  /home/bbkgl/CLionProjects/bbkgl/Poller.cpp
  /home/bbkgl/CLionProjects/bbkgl/Poller.h
+ /home/bbkgl/CLionProjects/bbkgl/Timestamp.h
 CMakeFiles/bbkgl.dir/Timestamp.cpp.o
  /home/bbkgl/CLionProjects/bbkgl/Timestamp.cpp
  /home/bbkgl/CLionProjects/bbkgl/Timestamp.h

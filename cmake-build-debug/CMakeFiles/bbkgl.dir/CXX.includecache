@@ -41,11 +41,23 @@ thread
 /home/bbkgl/CLionProjects/bbkgl/Poller.cpp
 Poller.h
 /home/bbkgl/CLionProjects/bbkgl/Poller.h
+poll.h
+-
+iostream
+-
 
 /home/bbkgl/CLionProjects/bbkgl/Poller.h
 vector
 -
 boost/core/noncopyable.hpp
+-
+Timestamp.h
+/home/bbkgl/CLionProjects/bbkgl/Timestamp.h
+EventLoop.h
+/home/bbkgl/CLionProjects/bbkgl/EventLoop.h
+Channel.h
+/home/bbkgl/CLionProjects/bbkgl/Channel.h
+map
 -
 
 /home/bbkgl/CLionProjects/bbkgl/Timestamp.cpp

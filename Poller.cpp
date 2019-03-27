@@ -60,6 +60,8 @@ void Poller::FillActiveChannels(int num_events, Poller::ChannelList *active_chan
     }
 }
 
+// 本UpdateChannel()首先由Channel本身的Update调用，在channel自身关注的事件发生改变以后
+// 其在Poller中对应的的事件也要改变，同时
 void Poller::UpdateChannel(Channel *channel)
 {
     // 判断当前线程是否是创建时的线程
@@ -82,20 +84,25 @@ void Poller::UpdateChannel(Channel *channel)
         channel->SetIndex(idx);
         channels_[pfd.fd] = channel;
     }
-    else
+    else   // 如果是已经存在的channel....因为本身channel传的是指针，
+           // 所以当channel对象之前已经修改时，对应的映射表channels不用修改，只需要修改与之对应的Poller::pollfds_表
     {
-        // 假设找到了
+        // 假设在Poller::channels中找到了
         assert(channels_.find(channel->GetFd()) != channels_.end());
         // 假设真的找到了
         assert(channels_[channel->GetFd()] == channel);
+        // 获取在Poller::PollFdList中的位置
         int idx = channel->GetIndex();
+        // 在pollfds_真的存在
         assert(0 <= idx && idx < static_cast<int>(pollfds_.size()));
+        // 找到channel对应的pollfd（注意这里是引用）
         struct pollfd &pfd = pollfds_[idx];
         assert(pfd.fd == channel->GetFd() || pfd.fd == -1);
+        // 更改channel对应的pollfd对应的关心的事件
         pfd.events = static_cast<short>(channel->GetEvents());
         pfd.revents = 0;
 
-        // 如果channel暂时不关心任何事件，酒吧pollfd.fd设为-1，让poller忽略这个channel
+        // 如果channel暂时不关心任何事件，就把pollfd.fd设为-1，让poller忽略这个channel
         if (channel->IsNoneEvent())
         {
             pfd.fd = -1;

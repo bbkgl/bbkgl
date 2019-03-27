@@ -8,8 +8,11 @@ CMakeFiles/bbkgl.dir/Channel.cpp.o: ../EventLoop.h
 CMakeFiles/bbkgl.dir/EventLoop.cpp.o: ../EventLoop.cpp
 CMakeFiles/bbkgl.dir/EventLoop.cpp.o: ../EventLoop.h
 
+CMakeFiles/bbkgl.dir/Poller.cpp.o: ../Channel.h
+CMakeFiles/bbkgl.dir/Poller.cpp.o: ../EventLoop.h
 CMakeFiles/bbkgl.dir/Poller.cpp.o: ../Poller.cpp
 CMakeFiles/bbkgl.dir/Poller.cpp.o: ../Poller.h
+CMakeFiles/bbkgl.dir/Poller.cpp.o: ../Timestamp.h
 
 CMakeFiles/bbkgl.dir/Timestamp.cpp.o: ../Timestamp.cpp
 CMakeFiles/bbkgl.dir/Timestamp.cpp.o: ../Timestamp.h
