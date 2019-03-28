@@ -81,10 +81,13 @@ TimerQueue::~TimerQueue()
         delete it->second;
 }
 
-TimerId TimerQueue::AddTime(const TimerCallback &cb, Timestamp when, double interval)
+TimerId TimerQueue::AddTimer(const TimerCallback &cb, Timestamp when, double interval)
 {
+    // 生成一个新的定时器
     Timer *timer = new Timer(cb, when, interval);
     loop_->AssertInLoopThread();
+
+    // 插入到定时器队列
     bool EarliestChange = Insert(timer);
 
     // 队列中增加新的定时器以后，改变新的到期时间
@@ -155,7 +158,7 @@ void TimerQueue::Reset(const std::vector<Entry> &expired, Timestamp now)
     // 如果定时器队列不为空，则获取到最早的定时器队列响应时间
     if (!timers_.empty())
         next_expire = timers_.begin()->second->Expiration();
-    // 获取到的下次到期时间如果合法
+    // 获取到的下次到期时间，如果合法，则为队列下次的到期时间
     if (next_expire.valid())
         ResetTimerfd(timerfd_, next_expire);
 }

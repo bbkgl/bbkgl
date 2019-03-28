@@ -21,7 +21,8 @@ public:
     TimerQueue(EventLoop *loop);
     ~TimerQueue();
 
-    TimerId AddTime(const TimerCallback &cb, Timestamp when, double interval);
+    // 生成一个新的定时器插入到定时器队列
+    TimerId AddTimer(const TimerCallback &cb, Timestamp when, double interval);
 
     // void Cancle(TimerId timer_id);
 
@@ -37,9 +38,10 @@ private:
     // 将所有到期的定时器取出
     std::vector<Entry> GetExpired(Timestamp now);
 
-    // 这个暂时不知道干什么的
+    // 将所有到期的定时器根据当前时间进行重置，并重置定时器队列的到期时间
     void Reset(const std::vector<Entry> &expired, Timestamp now);
 
+    // 新的定时器插入到队列
     bool Insert(Timer *timer);
 
     // 所处的事件循环
