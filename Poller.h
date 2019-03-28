@@ -34,15 +34,19 @@ public:
     void AssertInLoopThread() { owner_loop_->AssertInLoopThread(); }
 
 private:
-    //
+    // 遍历pollfds_，将活跃事件填入到channels列表中，由Poller::Poll()函数调用
     void FillActiveChannels(int num_events, ChannelList *active_channels) const;
 
+    // Poller属于哪个循环
     EventLoop *owner_loop_;
 
     using PollFdList = std::vector<struct pollfd>;
     using ChannelMap = std::map<int, Channel*>;
 
+    // 委托内核检测的事件列表
     PollFdList pollfds_;
+
+    // fd到channel的映射
     ChannelMap channels_;
 };
 

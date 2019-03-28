@@ -36,7 +36,7 @@ Timestamp Poller::Poll(int timeout_ms, Poller::ChannelList *active_channels)
     return now;
 }
 
-// 遍历pollfds_，将活跃事件填入到channels列表中
+// 遍历pollfds_，将活跃事件填入到channels列表中，由Poller::Poll()函数调用
 void Poller::FillActiveChannels(int num_events, Poller::ChannelList *active_channels) const
 {
     for (PollFdList::const_iterator pfd = pollfds_.begin(); pfd != pollfds_.end(); pfd++)
