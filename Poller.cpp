@@ -5,6 +5,7 @@
 #include "Poller.h"
 #include <poll.h>
 #include <iostream>
+#include "Channel.h"
 
 Poller::Poller(EventLoop *loop) :
     owner_loop_(loop)
@@ -61,19 +62,19 @@ void Poller::FillActiveChannels(int num_events, Poller::ChannelList *active_chan
 }
 
 // 本UpdateChannel()首先由Channel本身的Update调用，在channel自身关注的事件发生改变以后
-// 其在Poller中对应的的事件也要改变，同时
+// 其在Poller中对应的的事件也要改变
 void Poller::UpdateChannel(Channel *channel)
 {
     // 判断当前线程是否是创建时的线程
     AssertInLoopThread();
 
     // 打印当前的文件描述符对应的事件
-    std::cout << "fd = " << channel->GetFd() << " events = " << channel->GetEvents();
+    std::cout << "fd = " << channel->GetFd() << " events = " << channel->GetEvents() << std::endl;
     // 如果响应的是一个新的channel，需要即使更新poller中的channels_和pollfds_
     if (channel->GetIndex() < 0)
     {
-        // 假设找到了
-        assert(channels_.find(channel->GetFd()) != channels_.end());
+        // 假设找不到，即这是个新的Channel，channels_中应该不存在
+        assert(channels_.find(channel->GetFd()) == channels_.end());
         struct pollfd pfd;
         pfd.fd = channel->GetFd();
         // 新的结构体标记事件
@@ -100,6 +101,8 @@ void Poller::UpdateChannel(Channel *channel)
         assert(pfd.fd == channel->GetFd() || pfd.fd == -1);
         // 更改channel对应的pollfd对应的关心的事件
         pfd.events = static_cast<short>(channel->GetEvents());
+
+        // 因为活跃事件只能被内核检测后改变，所有在当前的pfd更新后将revents设置为0，表示暂时不活跃
         pfd.revents = 0;
 
         // 如果channel暂时不关心任何事件，就把pollfd.fd设为-1，让poller忽略这个channel

@@ -8,9 +8,8 @@
 #include <vector>
 #include <boost/core/noncopyable.hpp>
 #include "Timestamp.h"
-#include "EventLoop.h"
-#include "Channel.h"
 #include <map>
+#include "EventLoop.h"
 
 // 前置声明
 class Channel;

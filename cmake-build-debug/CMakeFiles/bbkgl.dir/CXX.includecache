@@ -11,6 +11,8 @@ Channel.h
 /home/bbkgl/CLionProjects/bbkgl/Channel.h
 poll.h
 /home/bbkgl/CLionProjects/bbkgl/poll.h
+EventLoop.h
+/home/bbkgl/CLionProjects/bbkgl/EventLoop.h
 iostream
 -
 
@@ -19,8 +21,6 @@ boost/core/noncopyable.hpp
 -
 functional
 -
-EventLoop.h
-/home/bbkgl/CLionProjects/bbkgl/EventLoop.h
 
 /home/bbkgl/CLionProjects/bbkgl/EventLoop.cpp
 EventLoop.h
@@ -29,6 +29,10 @@ iostream
 -
 poll.h
 -
+Poller.h
+/home/bbkgl/CLionProjects/bbkgl/Poller.h
+Channel.h
+/home/bbkgl/CLionProjects/bbkgl/Channel.h
 
 /home/bbkgl/CLionProjects/bbkgl/EventLoop.h
 boost/noncopyable.hpp
@@ -36,6 +40,8 @@ boost/noncopyable.hpp
 cassert
 -
 thread
+-
+vector
 -
 
 /home/bbkgl/CLionProjects/bbkgl/Poller.cpp
@@ -45,6 +51,8 @@ poll.h
 -
 iostream
 -
+Channel.h
+/home/bbkgl/CLionProjects/bbkgl/Channel.h
 
 /home/bbkgl/CLionProjects/bbkgl/Poller.h
 vector
@@ -53,12 +61,10 @@ boost/core/noncopyable.hpp
 -
 Timestamp.h
 /home/bbkgl/CLionProjects/bbkgl/Timestamp.h
-EventLoop.h
-/home/bbkgl/CLionProjects/bbkgl/EventLoop.h
-Channel.h
-/home/bbkgl/CLionProjects/bbkgl/Channel.h
 map
 -
+EventLoop.h
+/home/bbkgl/CLionProjects/bbkgl/EventLoop.h
 
 /home/bbkgl/CLionProjects/bbkgl/Timestamp.cpp
 Timestamp.h
@@ -85,6 +91,12 @@ unistd.h
 -
 thread
 -
+sys/timerfd.h
+-
+cstring
+-
 EventLoop.h
 /home/bbkgl/CLionProjects/bbkgl/EventLoop.h
+Channel.h
+/home/bbkgl/CLionProjects/bbkgl/Channel.h
 

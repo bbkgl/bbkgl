@@ -8,7 +8,8 @@
 
 #include <boost/core/noncopyable.hpp>
 #include <functional>
-#include "EventLoop.h"
+
+class EventLoop;
 
 class Channel : boost::noncopyable
 {
@@ -16,7 +17,7 @@ public:
     // using的作用和typedef差不多
     using EventCallback = std::function<void()>;
 
-    Channel(EventLoop * loop, int fd);
+    Channel(EventLoop *loop, int fd);
 
     // 分发事件
     void HandleEvent();

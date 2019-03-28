@@ -1,54 +1,50 @@
 #include <iostream>
 #include <unistd.h>
 #include <thread>
+#include <sys/timerfd.h>
+#include <cstring>
 #include "EventLoop.h"
+#include "Channel.h"
 
 EventLoop *g_loop;
 
-void ThreadFunc1()
+// 读事件回调函数。。。也就是最后EventLoop::HandleEvent()执行的函数
+void timeout()
 {
-    // 打印子线程的进程id和线程id
-    std::cout << "Func(): pid = " << getpid() << " tid = " << std::this_thread::get_id() << std::endl;
-
-    // loop对象在子线程中创建，并运行了loop循环
-    EventLoop loop;
-    loop.Loop();
+    printf("Timeout!\n");
+    g_loop->Quit();
 }
 
-void ThreadFunc2()
-{
-    g_loop->Loop();
-}
-
-// 测试1
 int main()
 {
-    // 打印主线程的进程id和线程id
-    std::cout << "Func(): pid = " << getpid() << " tid = " << std::this_thread::get_id() << std::endl;
-
+    // g_loop指针调用EventLoop::Quit()函数退出Loop()循环
     EventLoop loop;
+    g_loop = &loop;
 
-    std::thread t(ThreadFunc1);
-    t.join();
+    // 申请一个计时器的文件描述符
+    int timerfd = ::timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
 
-    // loop对象在主线程中创建，并运行了loop循环
+    // 创建一个EventLoop循环下的Channel对象，并关注timerfd定时器文件描述符
+    Channel channel(&loop, timerfd);
+
+    // 给Channel对象传入读事件回调函数
+    channel.SetReadCallback(timeout);
+
+    // 修改关注的事件为可读事件
+    channel.EnableReading();
+
+    // 对对应的定时器设置事件响应时间
+    struct itimerspec howlong;
+    bzero(&howlong, sizeof(howlong));
+    howlong.it_value.tv_sec = 5;
+
+    // 定时器事件立即响应
+    ::timerfd_settime(timerfd, 0, &howlong, nullptr);
+
+    // 开始循环
     loop.Loop();
+
+    close(timerfd);
 
     return 0;
 }
-
-// 测试2
-//int main()
-//{
-//    // 创建了一个事件循环对象
-//    EventLoop loop;
-//
-//    // 让g_loop指针指向了loop对象
-//    g_loop = &loop;
-//
-//    // 创建一个线程，运行了loop对象
-//    // 这样会发生错误，因为loop对象是在主线程创建的，但是却在子线程被启动了Loop成员函数
-//    std::thread t(ThreadFunc2);
-//    t.join();
-//    return 0;
-//}

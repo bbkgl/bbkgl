@@ -4,6 +4,7 @@
 
 #include "Channel.h"
 #include "poll.h"
+#include "EventLoop.h"
 #include <iostream>
 
 // static常量的定义放到源文件中
@@ -22,7 +23,7 @@ Channel::Channel(EventLoop *loop, int fd) :
 // 更新事件，Update()函数会调用loop_->UpdateChannel()，然后又调用Poller::UpdateChannel()
 void Channel::Update()
 {
-    loop_->UpdateChannel();
+    loop_->UpdateChannel(this);
 }
 
 // Channel的核心，由EventLoop::loop()调用

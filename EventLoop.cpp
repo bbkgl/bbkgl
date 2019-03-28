@@ -5,15 +5,22 @@
 #include "EventLoop.h"
 #include <iostream>
 #include <poll.h>
+#include "Poller.h"
+#include "Channel.h"
 
 // __thread变量每一个线程有一份独立实体，
 // 各个线程的值互不干扰。可以用来修饰那些带有全局性且值可能变，但是又不值得用全局变量保护的变量。
 __thread EventLoop* t_loop_in_this_thread = nullptr;
 
+// poll函数的阻塞时长为10s
+const int k_poll_time_ms = 10000;
+
 // EventLoop对象创建时，looping属性会被赋值为false，对象销毁时，会判断这个值是不是false
 EventLoop::EventLoop()
         : looping_(false),
-          thread_id_(std::this_thread::get_id())
+          thread_id_(std::this_thread::get_id()),
+          poller_(new Poller(this)),
+          quit_(false)
 {
     std::cout << "EventLoop created " << this << " in thread " << thread_id_ << std::endl;
 
@@ -47,8 +54,23 @@ void EventLoop::Loop()
     // “事件循环”启动
     looping_ = true;
 
-    // 当前的poll函数什么都不干，这里表示等待5秒后退出
-    ::poll(nullptr, 0, 5*1000);
+    // 退出标记为false
+    quit_ = false;
+
+    while (!quit_)
+    {
+        active_channels_.clear();
+
+        // 传地址进去，方便Epoller::poll函数对active_channels_进行改动
+        poller_->Poll(k_poll_time_ms, &active_channels_);
+
+        // 经过返回的active_channels_里面都是活跃的channel，遍历其中活跃的，然后进行事件处理
+        for (ChannelList::iterator it = active_channels_.begin();
+                it != active_channels_.end(); it++)
+        {
+            (*it)->HandleEvent();
+        }
+    }
 
     // 循环结束，停止事件循环
     std::cout << "EventLoop " << this << " stop looping\n";
@@ -60,4 +82,23 @@ void EventLoop::AbortNotInLoopThread()
     std::cout << "EventLoop::abortNotInLoopThread - EventLoop " << this
               << " was created in threadId_ = " << thread_id_
               << ", current thread id = " <<  std::this_thread::get_id() << std::endl;
+}
+
+// Channel::Update()--->EventLoop::UpdateChannel()---->Poller::UpdateChannel()
+void EventLoop::UpdateChannel(Channel *channel)
+{
+    // 判断调用自己的是不是自己记录的EventLoop对象
+    assert(channel->OwnerLoop() == this);
+
+    // 判断当前线程是不是在创建EventLoop对象时的循环
+    AssertInLoopThread();
+
+    // 调用Poller::UpdateChannel()更新channel在Poller::pollfds_中关注的事件
+    poller_->UpdateChannel(channel);
+}
+
+// 本函数应该由其他线程区调用唤醒，用来终止Loop()函数中的循环
+void EventLoop::Quit()
+{
+    quit_ = true;
 }
