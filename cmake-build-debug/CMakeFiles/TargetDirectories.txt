@@ -1,3 +1,0 @@
-/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/bbkgl/CLionProjects/bbkgl/cmake-build-debug/CMakeFiles/bbkgl.dir
