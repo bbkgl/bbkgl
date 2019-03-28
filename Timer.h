@@ -17,6 +17,8 @@ public:
 
     Timestamp Expiration() const { return expiration_; }
 
+    // 这个函数表示的是当前定时器是不是设置了间隔执行，即执行一次以后，下次的执行的事件就是interval以后
+    // 这个函数就是判断这个定时器能不能再次间隔运行
     bool Reapeat() const {return repeat_; }
 
     void Restart(Timestamp now);

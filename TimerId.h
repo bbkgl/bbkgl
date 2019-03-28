@@ -1,8 +1,10 @@
-#include "Timer.h"
+
 
 // 这个类好像就是返回
 
-class TimerId : boost::noncopyable
+class Timer;
+
+class TimerId
 {
 public:
     // 必须显示构造对象
