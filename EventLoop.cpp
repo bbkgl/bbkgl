@@ -194,6 +194,8 @@ void EventLoop::Wakeup()
     ssize_t n = write(wakeup_fd_, &one, sizeof(one));
     if (n != sizeof(one))
         std::cerr << "EventLoop::wakeup() writes " << n << " bytes instead of 8" << std::endl;
+
+    printf("Wakeup!\n");
 }
 
 // 这个函数是要传入唤醒channel（wakeup_channel）的函数，用于读取事件
