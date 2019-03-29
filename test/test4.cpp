@@ -17,7 +17,7 @@ void Print(const char *msg)
 {
     // 打印传入的时间和消息
     printf("%d:\nmsg %s %s\n", cnt + 1, Timestamp::now().toString().c_str(), msg);
-    // 如果定时器事件达到了20个
+    // 如果回调函数触发了20次
     if (++cnt == 20)
     {
         g_loop->Quit();

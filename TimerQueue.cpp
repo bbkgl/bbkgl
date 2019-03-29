@@ -85,6 +85,15 @@ TimerId TimerQueue::AddTimer(const TimerCallback &cb, Timestamp when, double int
 {
     // 生成一个新的定时器
     Timer *timer = new Timer(cb, when, interval);
+
+    // 这样能让最后TimerQueue::AddTimerInLoop()函数最后在IO线程的Event::Loop()循环中
+    // 执行DoPendingFunctors()函数调用。。。DoPendingFunctors()函数只可能由IO线程调用
+    loop_->RunInLoop(std::bind(&TimerQueue::AddTimerInLoop, this, timer));
+    return TimerId(timer);
+}
+
+void TimerQueue::AddTimerInLoop(Timer *timer)
+{
     loop_->AssertInLoopThread();
 
     // 插入到定时器队列
@@ -93,8 +102,6 @@ TimerId TimerQueue::AddTimer(const TimerCallback &cb, Timestamp when, double int
     // 队列中增加新的定时器以后，改变新的到期时间
     if (EarliestChange)
         ResetTimerfd(timerfd_, timer->Expiration());
-
-    return TimerId(timer);
 }
 
 void TimerQueue::HandleRead()

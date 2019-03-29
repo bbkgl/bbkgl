@@ -5,6 +5,7 @@
 #include <boost/core/noncopyable.hpp>
 #include <set>
 #include <vector>
+#include <thread>
 
 #include "Timestamp.h"
 #include "Callbacks.h"
@@ -32,6 +33,9 @@ private:
     using Entry = std::pair<Timestamp, Timer *>;
     using TimerList = std::set<Entry>;
 
+    // 将定时器加入到EventLoop中
+    void AddTimerInLoop(Timer *timer);
+
     // 当定时器时间到的时候处理事件
     void HandleRead();
 
@@ -43,6 +47,8 @@ private:
 
     // 新的定时器插入到队列
     bool Insert(Timer *timer);
+
+    /*------------------------分割线，上面是方法，下面是属性---------------------------------*/
 
     // 所处的事件循环
     EventLoop *loop_;
