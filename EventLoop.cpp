@@ -88,7 +88,7 @@ void EventLoop::UpdateChannel(Channel *channel)
     // 判断调用自己的是不是自己记录的EventLoop对象
     assert(channel->OwnerLoop() == this);
 
-    // 判断当前线程是不是在创建EventLoop对象时的循环
+    // 判断当前线程是不是在创建EventLoop对象时的线程
     AssertInLoopThread();
 
     // 调用Poller::UpdateChannel()更新channel在Poller::pollfds_中关注的事件

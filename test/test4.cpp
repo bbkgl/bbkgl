@@ -24,7 +24,7 @@ void Print(const char *msg)
     }
 }
 
-int main()
+int test4()
 {
     // 打印当前线程ID和时间
     PrintId();

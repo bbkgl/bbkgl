@@ -18,6 +18,9 @@ class TimerQueue;
 class EventLoop : public boost::noncopyable
 {
 public:
+    //
+    using Functor = std::function<void()>;
+
     EventLoop();
     ~EventLoop();
 
@@ -56,9 +59,6 @@ private:
 
     using ChannelList = std::vector<Channel *>;
 
-    // 定时器队列
-    std::unique_ptr<TimerQueue> timer_queue_;
-
     // 检查当前循环所在线程是否是创建对象时的线程
     void AbortNotInLoopThread();
 
@@ -76,6 +76,10 @@ private:
 
     // 活跃channel列表
     ChannelList active_channels_;
+
+    // 定时器队列
+    std::unique_ptr<TimerQueue> timer_queue_;
+
 };
 
 
