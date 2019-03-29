@@ -1,4 +1,7 @@
-// 这个类好像就是简单的生成一个定时器对象
+#ifndef BBKGL_TIMERID_H
+#define BBKGL_TIMERID_H
+
+// 这个类好像就是简单的生成一个定时器指针
 
 class Timer;
 
@@ -13,3 +16,5 @@ public:
 private:
     Timer *value_;
 };
+
+#endif //BBKGL_TIMERID_H

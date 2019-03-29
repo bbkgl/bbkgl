@@ -1,12 +1,9 @@
-//
-// Created by bbkgl on 19-3-27.
-//
-
 #include "EventLoop.h"
 #include <iostream>
 #include <poll.h>
 #include "Poller.h"
 #include "Channel.h"
+#include "TimerQueue.h"
 
 // __thread变量每一个线程有一份独立实体，
 // 各个线程的值互不干扰。可以用来修饰那些带有全局性且值可能变，但是又不值得用全局变量保护的变量。
@@ -20,7 +17,8 @@ EventLoop::EventLoop()
         : looping_(false),
           thread_id_(std::this_thread::get_id()),
           poller_(new Poller(this)),
-          quit_(false)
+          quit_(false),
+          timer_queue_(new TimerQueue(this))
 {
     std::cout << "EventLoop created " << this << " in thread " << thread_id_ << std::endl;
 
@@ -79,7 +77,7 @@ void EventLoop::Loop()
 
 void EventLoop::AbortNotInLoopThread()
 {
-    std::cout << "EventLoop::abortNotInLoopThread - EventLoop " << this
+    std::cerr << "EventLoop::abortNotInLoopThread - EventLoop " << this
               << " was created in threadId_ = " << thread_id_
               << ", current thread id = " <<  std::this_thread::get_id() << std::endl;
 }
@@ -101,4 +99,26 @@ void EventLoop::UpdateChannel(Channel *channel)
 void EventLoop::Quit()
 {
     quit_ = true;
+}
+
+TimerId EventLoop::RunAt(const Timestamp &when, const TimerCallback &cb)
+{
+    // 根据到期时间创建一个新的定时器并让其在到期时间运行回调函数，返回其实就是定时器指针
+    return timer_queue_->AddTimer(cb, when, 0.0);
+}
+
+TimerId EventLoop::RunAfter(double delay, const TimerCallback &cb)
+{
+    // 计算得到定时器的到期时间
+    Timestamp when(addTime(Timestamp::now(), delay));
+    // 根据到期时间创建一个新的定时器并让其在到期时间运行回调函数，返回其实就是定时器指针
+    return RunAt(when, cb);
+}
+
+TimerId EventLoop::RunEvery(double interval, const TimerCallback &cb)
+{
+    // 计算得到定时器的到期时间
+    Timestamp when(addTime(Timestamp::now(), interval));
+    // 根据到期时间创建一个新的定时器并让其在到期时间运行回调函数，并让定时器重复定期运行，返回其实就是定时器指针
+    return timer_queue_->AddTimer(cb, when, interval);
 }

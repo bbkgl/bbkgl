@@ -21,7 +21,7 @@ public:
     TimerQueue(EventLoop *loop);
     ~TimerQueue();
 
-    // 生成一个新的定时器插入到定时器队列
+    // 生成一个新的定时器插入到定时器队列，when是定时器中的函数启动的时间，返回一个定时器指针
     TimerId AddTimer(const TimerCallback &cb, Timestamp when, double interval);
 
     // void Cancle(TimerId timer_id);
