@@ -66,7 +66,7 @@ TimerQueue::TimerQueue(EventLoop *loop) :
     timerfd_channel_(loop, timerfd_),
     timers_()
 {
-    // 为定时器队列的channel设置读事件回调函数，并设置为可读事件
+    // 为定时器队列的channel设置读事件回调函数，并设置为可读事件，这样会把timerfd_注册进poller_的fd列表中
     timerfd_channel_.SetReadCallback(std::bind(&TimerQueue::HandleRead, this));
     timerfd_channel_.EnableReading();
 }
