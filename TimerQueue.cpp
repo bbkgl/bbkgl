@@ -88,6 +88,7 @@ TimerId TimerQueue::AddTimer(const TimerCallback &cb, Timestamp when, double int
 
     // 这样能让最后TimerQueue::AddTimerInLoop()函数最后在IO线程的Event::Loop()循环中
     // 执行DoPendingFunctors()函数调用。。。DoPendingFunctors()函数只可能由IO线程调用
+    // 所以就是线程安全的
     loop_->RunInLoop(std::bind(&TimerQueue::AddTimerInLoop, this, timer));
     return TimerId(timer);
 }
