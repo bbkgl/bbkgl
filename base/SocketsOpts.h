@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <endian.h>
 #include <cstdio>
+#include <arpa/inet.h>
 
 namespace sockets
 {

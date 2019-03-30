@@ -6,32 +6,39 @@
 #include <cstdio>
 #include <cstring>
 #include <sys/socket.h>
-#include <arpa/inet.h>
 #include <unistd.h>
 #include <boost/implicit_cast.hpp>
 
-using SA = struct sockaddr;
-
-const SA *sockaddr_cast(const struct sockaddr_in *addr)
+namespace
 {
-    return static_cast<const SA *>(boost::implicit_cast<const void *>(addr));
-}
+    using SA = struct sockaddr;
 
-SA *sockaddr_cast(struct sockaddr_in *addr)
-{
-    return static_cast<SA *>(boost::implicit_cast<void *>(addr));
-}
+    template<typename To, typename From>
+    inline To implicit_cast(From const &f) {
+        return f;
+    }
+
+    const SA *sockaddr_cast(const struct sockaddr_in *addr)
+    {
+        return static_cast<const SA *>(implicit_cast<const void*>(addr));
+    }
+
+    SA *sockaddr_cast(struct sockaddr_in *addr)
+    {
+        return static_cast<SA *>(implicit_cast<void*>(addr));
+    }
 
 // 给文件描述符设置成非阻塞模式
-void SetNonblockAndCloseOnExec(int sockfd)
-{
-    int flags = fcntl(sockfd, F_GETFL, 0);
-    flags |= O_NONBLOCK;
-    int ret = fcntl(sockfd, F_SETFL, flags);
+    void SetNonblockAndCloseOnExec(int sockfd)
+    {
+        int flags = fcntl(sockfd, F_GETFL, 0);
+        flags |= O_NONBLOCK;
+        int ret = fcntl(sockfd, F_SETFL, flags);
 
-    flags = fcntl(sockfd, F_GETFL, 0);
-    flags |= FD_CLOEXEC;
-    ret = fcntl(sockfd, F_SETFL, flags);
+        flags = fcntl(sockfd, F_GETFL, 0);
+        flags |= FD_CLOEXEC;
+        ret = fcntl(sockfd, F_SETFL, flags);
+    }
 }
 
 int sockets::CreateNonblockingOrDie()
@@ -51,7 +58,7 @@ int sockets::CreateNonblockingOrDie()
 
 void sockets::BindOrDie(int sockfd, const struct sockaddr_in &addr)
 {
-    int ret = bind(sockfd, sockaddr_cast(&addr), sizeof(addr));
+    int ret = bind(sockfd, sockaddr_cast(&addr), sizeof(sockaddr));
     if (ret < 0)
         std::cerr << "SocketsOpts---BindOrDie\n";
 }
@@ -65,7 +72,7 @@ void sockets::ListenOrDie(int sockfd)
 
 int sockets::Accept(int sockfd, struct sockaddr_in *addr)
 {
-    socklen_t addr_len = sizeof(*addr);
+    socklen_t addr_len = sizeof(sockaddr_in);
 #if VALGRIND
     int connfd = accept(sockfd, sockaddr_cast(addr), &addrlen);
     SetNonBlockAndCloseOnExec(connfd);
