@@ -34,7 +34,7 @@ void SetNonblockAndCloseOnExec(int sockfd)
     ret = fcntl(sockfd, F_SETFL, flags);
 }
 
-int CreateNonblockingOrDie()
+int sockets::CreateNonblockingOrDie()
 {
 #if VALGRIND
     int sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -49,21 +49,21 @@ int CreateNonblockingOrDie()
     return sockfd;
 }
 
-void BindOrDie(int sockfd, const struct sockaddr_in &addr)
+void sockets::BindOrDie(int sockfd, const struct sockaddr_in &addr)
 {
     int ret = bind(sockfd, sockaddr_cast(&addr), sizeof(addr));
     if (ret < 0)
         std::cerr << "SocketsOpts---BindOrDie\n";
 }
 
-void ListenOrDie(int sockfd)
+void sockets::ListenOrDie(int sockfd)
 {
     int ret = ::listen(sockfd, SOMAXCONN);
     if (ret < 0)
         std::cerr << "SocketsOpts---ListenOrDie\n";
 }
 
-int Accept(int sockfd, struct sockaddr_in *addr)
+int sockets::Accept(int sockfd, struct sockaddr_in *addr)
 {
     socklen_t addr_len = sizeof(*addr);
 #if VALGRIND
@@ -106,24 +106,24 @@ int Accept(int sockfd, struct sockaddr_in *addr)
     return connfd;
 }
 
-void Close(int sockfd)
+void sockets::Close(int sockfd)
 {
     if (close(sockfd) < 0)
         std::cerr << "SocketsOpts---Close\n";
 }
 
-void ToHostPort(char *buf, size_t size, const struct sockaddr_in &addr)
+void sockets::ToHostPort(char *buf, size_t size, const struct sockaddr_in &addr)
 {
     char host[INET_ADDRSTRLEN] = "INVALId";
     inet_ntop(AF_INET, &addr.sin_addr, host, sizeof(host));
-    uint16_t port = NetworkToHost16(addr.sin_port);
+    uint16_t port = sockets::NetworkToHost16(addr.sin_port);
     snprintf(buf, size, "%s:%u", host, port);
 }
 
-void FromHostPort(const char* ip, uint16_t port, struct sockaddr_in* addr)
+void sockets::FromHostPort(const char* ip, uint16_t port, struct sockaddr_in* addr)
 {
     addr->sin_family = AF_INET;
-    addr->sin_port = HostToNetwork16(port);
+    addr->sin_port = sockets::HostToNetwork16(port);
     if (inet_pton(AF_INET, ip, &addr->sin_addr) <= 0)
         std::cerr << "SocketsOpts---FromHostPort\n";
 }
