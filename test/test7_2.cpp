@@ -21,6 +21,7 @@
  *
  * */
 
+// 第一个回复客户端的回调函数
 // 本函数首先由Acceptor::new_conn_callback_接收，然后通过Acceptor::HandleRead()一起
 // 传给了Acceptor::accept_channel_中，最后在Loop()中poller_检测到事件，然后Acceptor::HandleRead()被调用
 // 最后本函数被调用
@@ -38,6 +39,7 @@ void NewConn1(int sockfd, const InetAddress &peer_addr)
     sockets::Close(sockfd);
 }
 
+// 第二个回复客户端的回调函数
 // 本函数首先由Acceptor::new_conn_callback_接收，然后通过Acceptor::HandleRead()一起
 // 传给了Acceptor::accept_channel_中，最后在Loop()中poller_检测到事件，然后Acceptor::HandleRead()被调用
 // 最后本函数被调用
@@ -60,23 +62,25 @@ int main()
 {
     printf("test7_1(): pid = %d\n", getpid());
 
-    // 根据端口构造两个sockaddr地址的封装对象
+    // 根据端口构造两个sockaddr地址的封装对象，一个给线程1，一个给线程2
     InetAddress listen_addr1(2333);
     InetAddress listen_addr2(1234);
 
-    // 不谈了
+    // 构造两个EventLoop对象，一个在主线程创建，一个在子线程创建
     EventLoop loop1;
     EventLoop *loop2 = (new EventLoopThread())->StartLoop();
 
-    // 接收器
+    // 两个接收器
     Acceptor acceptor1(&loop1, listen_addr1);
     Acceptor acceptor2(loop2, listen_addr2);
 
     // 设置回调函数
     acceptor1.SetNewConnetionCallback(NewConn1);
     acceptor2.SetNewConnetionCallback(NewConn2);
+
     // 开始监听
     acceptor1.Listen();
+    // 这样能保证调用Listen()函数的是创建loop2对象的线程，具体解释见test6
     loop2->RunInLoop(std::bind(&Acceptor::Listen, &acceptor2));
 
     // 启动循环
