@@ -1,47 +1,85 @@
-#include <cstdio>
-#include "EventLoop.h"
+#include "Acceptor.h"
+#include "base/InetAddress.h"
 #include "EventLoopThread.h"
-#include <thread>
+#include "EventLoop.h"
+#include "base/SocketsOpts.h"
+#include "Timestamp.h"
+#include <cstring>
 
-void RunInThread()
+/*
+ * 2019年3月30日20:45
+ * 按照陈硕的书303页实现的同时监听两个port的服务器，每个port发送不同的字符串。
+ * 可以实现功能，但暂时不知道如何解决非IO线程调用Acceptor::Listen()的问题。
+ * 因为如果主线程直接调用accept2.Listen()，最后就是在Listen()函数中执行loop_->AssertInLoopThread()，
+ * 由于loop_是子线程中创建，则会检测到是非IO线程调用。。。。
+ *
+ * 2019年3月30日21:41
+ * 成功实现陈硕的书303页第二个练习，解决了之前的“非IO线程调用Acceptor::Listen()的问题”。
+ * 将accept2.Listen()函数利用std::bind()放入到EventLoop::RunInLoop()中执行，这样最终执行
+ * Listen()函数的就是IO线程，这个在test6中有解释。
+ *
+ * */
+
+// 本函数首先由Acceptor::new_conn_callback_接收，然后通过Acceptor::HandleRead()一起
+// 传给了Acceptor::accept_channel_中，最后在Loop()中poller_检测到事件，然后Acceptor::HandleRead()被调用
+// 最后本函数被调用
+void NewConn1(int sockfd, const InetAddress &peer_addr)
 {
-    printf("RunInThread(): pid = %d, tid = %d\n", getpid(), std::this_thread::get_id());
+    Timestamp time;
+    char buf[50];
+    sprintf(buf, "(Time: %s)---", time.now().toFormattedString().c_str());
+    printf("%sNewConn(): accepted a new connection from %s.\n",
+           buf, peer_addr.ToHostPort().c_str());
+    // 给客户端回话
+    strcat(buf, "How are you?\n");
+    write(sockfd, buf, sizeof(buf));
+    // 关闭套接字
+    sockets::Close(sockfd);
 }
+
+// 本函数首先由Acceptor::new_conn_callback_接收，然后通过Acceptor::HandleRead()一起
+// 传给了Acceptor::accept_channel_中，最后在Loop()中poller_检测到事件，然后Acceptor::HandleRead()被调用
+// 最后本函数被调用
+void NewConn2(int sockfd, const InetAddress &peer_addr)
+{
+    Timestamp time;
+    char buf[50];
+    sprintf(buf, "(Time: %s)---", time.now().toFormattedString().c_str());
+    printf("%sNewConn(): accepted a new connection from %s.\n",
+           buf, peer_addr.ToHostPort().c_str());
+    // 给客户端回话
+    strcat(buf, "How do you do?\n");
+    write(sockfd, buf, sizeof(buf));
+    // 关闭套接字
+    sockets::Close(sockfd);
+}
+
 
 int main()
 {
-    printf("test6: pid = %d, tid = %d\n", getpid(), std::this_thread::get_id());
+    printf("test7_1(): pid = %d\n", getpid());
 
-    EventLoopThread loop_thread;
-    // 在子线程中生成了一个EventLoop对象，并返回了指针
-    EventLoop *loop = loop_thread.StartLoop();
-    // 由于并非本线程生成的对象，所以打印的线程ID和刚刚打印的线程ID不一样
-    // 执行顺序：loop->RunInLoop(RunInThread)--->QueueInLoop(cb)--->pending_functors_.push_back(cb)
-    //         --->pending_functors_.push_back(cb)--->EventLoop::Wakeup()--->EventLoop::poller_.poll()
-    //         --->EventLoop::DoPendingFunctors()--->RunInThread()
-    // 上述过程，从loop->RunInLoop(RunInThread)------->EventLoop::Wakeup()都是由非IO线程执行的，经由EventLoop::Wakeup()
-    // 唤醒EventLoop::poller_.poll()后，才回到IO线程，执行最后的RunInThread()
-    loop->RunInLoop(RunInThread);
-    sleep(1);
+    // 根据端口构造两个sockaddr地址的封装对象
+    InetAddress listen_addr1(2333);
+    InetAddress listen_addr2(1234);
 
+    // 不谈了
+    EventLoop loop1;
+    EventLoop *loop2 = (new EventLoopThread())->StartLoop();
 
-    // 由于并非本线程生成的对象，所以打印的线程ID和刚刚打印的线程ID不一样
-    // 执行顺序：loop->RunAfter(2, RunInThread)--->EventLoop::RunAt()--->TimerQueue::AddTimer()
-    //         --->TimerQueue::AddTimerInLoop()--->loop->RunInLoop(RunInThread)--->后续过程和上面的一样了就
-    // 上述过程，从loop->RunAfter(2, RunInThread)------->EventLoop::Wakeup()都是由非IO线程执行的
-    // 经由EventLoop::Wakeup()唤醒EventLoop::poller_.poll()后，才回到IO线程，执行最后的RunInThread()
-    loop->RunAfter(2, RunInThread);
-    sleep(3);
+    // 接收器
+    Acceptor acceptor1(&loop1, listen_addr1);
+    Acceptor acceptor2(loop2, listen_addr2);
 
-    // 同样非IO线程调用，要先经历唤醒才会最终退出。。。
-    loop->Quit();
+    // 设置回调函数
+    acceptor1.SetNewConnetionCallback(NewConn1);
+    acceptor2.SetNewConnetionCallback(NewConn2);
+    // 开始监听
+    acceptor1.Listen();
+    loop2->RunInLoop(std::bind(&Acceptor::Listen, &acceptor2));
 
-    /*
-     * 在Wakeup()函数中打印了“WakeUp”，测试后确实打印了四次“WakeUp”
-     * 所以就证实了loop->RunInLoop(RunInThread)、loop->RunAfter(2, RunInThread)、loop->Quit()都不是IO线程调用
-     * 且Wakeup函数在非IO线程调用时一定会触发！
-     * 四次打印的话，加上loop_thread最后析构的时候，也会调用一次loop_->Quit()
-    */
-    printf("test6 exited\n");
+    // 启动循环
+    loop1.Loop();
+
     return 0;
 }

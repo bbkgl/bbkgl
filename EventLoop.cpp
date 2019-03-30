@@ -33,10 +33,10 @@ EventLoop::EventLoop()
           thread_id_(std::this_thread::get_id()),
           poller_(new Poller(this)),
           quit_(false),
-          timer_queue_(new TimerQueue(this)),
+          timer_queue_(new TimerQueue(this)),       // 会给定时器队列分配一个文件描述符，并注册读事件
           call_pending_functors_(false),
           wakeup_fd_(CreateEventFd()),
-          wakeup_channel_(new Channel(this, wakeup_fd_))
+          wakeup_channel_(new Channel(this, wakeup_fd_))  // 分配文件描述符，随后注册读事件
 {
     std::cout << "EventLoop created " << this << " in thread " << thread_id_ << std::endl;
 

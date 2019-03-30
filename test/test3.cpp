@@ -15,7 +15,7 @@ void timeout()
     g_loop->Quit();
 }
 
-int test3()
+int main()
 {
     // g_loop指针调用EventLoop::Quit()函数退出Loop()循环
     EventLoop loop;

@@ -36,7 +36,7 @@ void Run1()
     g_flag = 2;
 }
 
-int test5()
+int main()
 {
     printf("test5(): pid = %d, flag = %d\n", getpid(), g_flag);
 
