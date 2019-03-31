@@ -135,5 +135,12 @@ void sockets::FromHostPort(const char* ip, uint16_t port, struct sockaddr_in* ad
         std::cerr << "SocketsOpts---FromHostPort\n";
 }
 
-
-
+struct sockaddr_in sockets::GetLocalAddr(int sockfd)
+{
+    struct sockaddr_in local_addr;
+    bzero(&local_addr, sizeof(local_addr));
+    socklen_t addrlen = sizeof(local_addr);
+    if (::getsockname(sockfd, sockaddr_cast(&local_addr), &addrlen) < 0)
+        std::cerr << "sockets::getLocalAddr" << std::endl;
+    return local_addr;
+}

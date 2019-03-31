@@ -58,7 +58,9 @@ namespace sockets
     void ToHostPort(char *buf, size_t size, const struct sockaddr_in &addr);
 
 // 将"ip:port"字符串形式转换成sockaddr_in结构体
-    void FromHostPort(const char* ip, uint16_t port, struct sockaddr_in* addr);
+    void FromHostPort(const char *ip, uint16_t port, struct sockaddr_in *addr);
+
+    struct sockaddr_in GetLocalAddr(int sockfd);
 }
 
 #endif //BBKGL_SOCKETSOPTS_H
