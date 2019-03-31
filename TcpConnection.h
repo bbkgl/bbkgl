@@ -7,6 +7,7 @@
 
 #include <boost/core/noncopyable.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <memory>
 #include "Callbacks.h"
 #include "base/InetAddress.h"
 
@@ -14,7 +15,7 @@ class Channel;
 class EventLoop;
 class Socket;
 
-class TcpConnection : boost::noncopyable, public boost::enable_shared_from_this<TcpConnection>
+class TcpConnection : boost::noncopyable, public std::enable_shared_from_this<TcpConnection>
 {
 public:
     TcpConnection(EventLoop *loop,

@@ -25,7 +25,7 @@ TcpConnection::TcpConnection(EventLoop *loop, const std::string &name, int sockf
 
 TcpConnection::~TcpConnection()
 {
-    std::cout << "TcpConnection::dtor[" <<  name_ << "] at " << this
+    std::cout << "(Close)TcpConnection::dtor[" <<  name_ << "] at " << this
               << " fd = " << channel_->GetFd() << std::endl;
 }
 
@@ -41,8 +41,15 @@ void TcpConnection::ConnEstablished()
     channel_->EnableReading();
 
     // conn_callback_本身由客户在Server中设置
-    // 强制转换成智能指针类型
-    conn_callback_(static_cast<std::shared_ptr<TcpConnection>>(this));
+    // 哇，这里贼坑。陈硕书上继承的是boost::enable_shared_from_this<TcpConnection>
+    // 可是我的conn_callback_()中的参数却是std::shared_ptr<TcpConnection>，所以一直报错
+    // 后面为了让CLion不报错，只能用static_cast强制转换，结果出现了conn_callback_回调结束后，
+    // TcpConnection对象直接析构的错误。。。。。
+    // 后面找到了一篇文章：https://blog.csdn.net/adream307/article/details/85116845
+    // 发现可以获得this指针的shared_ptr。。。。
+    // 然后将继承对象改成std::enable_shared_from_this<TcpConnection>，
+    // 可以使用shared_from_this()直接获得this指针的shared_ptr。
+    conn_callback_(shared_from_this());
 }
 
 void TcpConnection::HandleRead()
@@ -51,5 +58,14 @@ void TcpConnection::HandleRead()
     // 读取客户端发送的消息
     ssize_t n = read(channel_->GetFd(), buf, sizeof(buf));
     // 通过回调函数与客户端进行通信
-    msg_callback(static_cast<std::shared_ptr<TcpConnection>>(this), buf, n);
+    // msg_callback_本身由客户在Server中设置
+    // 哇，这里贼坑。陈硕书上继承的是boost::enable_shared_from_this<TcpConnection>
+    // 可是我的msg_callback_()中的参数却是std::shared_ptr<TcpConnection>，所以一直报错
+    // 后面为了让CLion不报错，只能用static_cast强制转换，结果出现了conn_callback_回调结束后，
+    // TcpConnection对象直接析构的错误。。。。。
+    // 后面找到了一篇文章：https://blog.csdn.net/adream307/article/details/85116845
+    // 发现可以获得this指针的shared_ptr。。。。
+    // 然后将继承对象改成std::enable_shared_from_this<TcpConnection>，
+    // 可以使用shared_from_this()直接获得this指针的shared_ptr。
+    msg_callback(shared_from_this(), buf, n);
 }
