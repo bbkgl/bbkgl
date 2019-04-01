@@ -49,7 +49,7 @@ public:
     void EnableReading() { events_ |= k_read_event; Update(); }
 //    void EnableWriting() { events_ |= k_write_event; Update(); }
 //    void DisableWriting() { events_ &= ~k_write_event; Update(); }
-//    void DisableAll() { events_ = k_none_event; Update(); }
+    void DisableAll() { events_ = k_none_event; Update(); }
 
     // Poller中要调用的函数，返回当前channel在Poller映射表中的位置
     int GetIndex() { return index_; }

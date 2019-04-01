@@ -3,10 +3,12 @@
 #include "EventLoop.h"
 #include "base/Socket.h"
 #include "Acceptor.h"
+#include "base/SocketsOpts.h"
 
 #include <cstdio>
 #include <errno.h>
 #include <iostream>
+#include <cstring>
 
 TcpConnection::TcpConnection(EventLoop *loop, const std::string &name, int sockfd, const InetAddress &local_addr,
                              const InetAddress &peer_addr) :
@@ -21,6 +23,13 @@ TcpConnection::TcpConnection(EventLoop *loop, const std::string &name, int sockf
     std::cout << "TcpConnection:ctor[" << name_ << "] at " << this
                                                            << " fd = " << sockfd << std::endl;
     channel_->SetReadCallback(std::bind(&TcpConnection::HandleRead, this));
+    // 其实我觉得下面三句都是没必要的，因为HandleRead()本来就会调用下面的三个函数，
+    // 最后也是在Channel::read_callback()中被调用，实际上Channel::read_callback()
+    // 就会调用TcpConnection::HandleRead()，HandleRead()根据情况调用以下三个函数，
+    // 然后那传进去的目的又是什么呢？到时候把下面三行注释掉
+    channel_->SetCloseCallback(std::bind(&TcpConnection::HandleClose, this));
+    channel_->SetWriteCallback(std::bind(&TcpConnection::HandleWrite, this));
+    channel_->SetErrorCallback(std::bind(&TcpConnection::HandleError, this));
 }
 
 TcpConnection::~TcpConnection()
@@ -52,6 +61,17 @@ void TcpConnection::ConnEstablished()
     conn_callback_(shared_from_this());
 }
 
+void TcpConnection::ConnDestroyed()
+{
+    loop_->AssertInLoopThread();
+    assert(state_ == k_connected);
+    SetState(k_disconnected);
+    channel_->DisableAll();
+    conn_callback_(shared_from_this());         // 注意这里是调用用户设置的conn_callback_回调
+
+    loop_->RemoveChannel(channel_.get());
+}
+
 void TcpConnection::HandleRead()
 {
     char buf[65536];
@@ -67,5 +87,35 @@ void TcpConnection::HandleRead()
     // 发现可以获得this指针的shared_ptr。。。。
     // 然后将继承对象改成std::enable_shared_from_this<TcpConnection>，
     // 可以使用shared_from_this()直接获得this指针的shared_ptr。
-    msg_callback(shared_from_this(), buf, n);
+    if (n > 0)
+        msg_callback_(shared_from_this(), buf, n);
+    else if (n == 0)              // 当读到的数据长度为0时，说明客户端主动断开了连接
+        HandleClose();
+    else HandleError();
+}
+
+void TcpConnection::HandleWrite()
+{
+
+}
+
+
+void TcpConnection::HandleClose()
+{
+    loop_->AssertInLoopThread();
+    std::cout << "WARN!TcpConnection::HandleClose state = " << state_ << std::endl;
+    assert(state_ == k_connected);
+    // 本Channel会不关注所有事件，即将被析构
+    channel_->DisableAll();
+    // 调用TcpServer绑定的函数
+    close_callback_ (shared_from_this());
+
+}
+
+void TcpConnection::HandleError()
+{
+    // 获取错误信息
+    int err = sockets::GetSocketError(socket_->GetFd());
+    std::cerr << "TcpConnection::handleError [" << name_
+              << "] - SO_ERROR = " << err << " " << std::endl;
 }

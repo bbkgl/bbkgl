@@ -61,6 +61,9 @@ namespace sockets
     void FromHostPort(const char *ip, uint16_t port, struct sockaddr_in *addr);
 
     struct sockaddr_in GetLocalAddr(int sockfd);
+
+    // 处理Socket错误
+    int GetSocketError(int sockfd);
 }
 
 #endif //BBKGL_SOCKETSOPTS_H

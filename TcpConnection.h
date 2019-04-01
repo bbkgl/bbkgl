@@ -42,16 +42,25 @@ public:
     void SetConnCallback(const ConnectionCallback &cb) { conn_callback_ = cb; }
 
     // TcpServer创建后，用户设置回调函数，然后传入调用
-    void SetMsgCallback(const MessageCallback &cb) { msg_callback = cb; }
+    void SetMsgCallback(const MessageCallback &cb) { msg_callback_ = cb; }
+
+    // 由HandleRead()调用，HandleRead()会被传入到Channel中
+    void SetCloseCallback(const CloseCallback &cb) { close_callback_ = cb; }
 
     // 在TcpServer::NewConnection()中被调用，也就是说是建立连接后的后续工作
     void ConnEstablished();
 
+    // 该函数传入到EventLoop::QueueInLoop()中最终回到IO线程调用
+    void ConnDestroyed();
+
     // 这就是建立连接后的通信工作了
     void HandleRead();
+    void HandleWrite();
+    void HandleError();
+    void HandleClose();
 
 private:
-    enum StateE{k_connecting, k_connected, };
+    enum StateE{k_connecting, k_connected, k_disconnected};
 
     void SetState(StateE s) { state_ = s; }
 
@@ -67,12 +76,12 @@ private:
     // 本身TcpConnection的对象就是由Acceptor接收到的连接返回后构造，而这个socket_指针就是指向
     // Acceptor接收连接请求后，返回的文件描述符fd会用来构造TcpConnection，TcpConnection的构造函数
     // 会用fd构造一个Socket对象，然后socket_再指向这个Socket对象
-    std::shared_ptr<Socket> socket_;
+    std::unique_ptr<Socket> socket_;
 
     // Channel本身就代表事件，每一个TcpConnect要和客户端实现通信的话，
     // 也就需要注册一个Channel，并设置可读（注册进poller的列表里），来实现通信
     // Channel由所在的EventLoop和建立连接后得到fd构造
-    std::shared_ptr<Channel> channel_;
+    std::unique_ptr<Channel> channel_;
 
     // 服务器本身的host
     InetAddress local_address_;
@@ -87,7 +96,10 @@ private:
     ConnectionCallback conn_callback_;
 
     // 用于通信的回调函数，由用户设置，在已经建立的连接的客户端发来信息后，作出相应的操作
-    MessageCallback msg_callback;
+    MessageCallback msg_callback_;
+
+    // 用于关闭连接的回调函数
+    CloseCallback close_callback_;
 
 };
 

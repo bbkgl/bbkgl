@@ -29,6 +29,8 @@ public:
     // 更新Channel的事件
     void UpdateChannel(Channel * channel);;
 
+    void RemoveChannel(Channel *);
+
     // 判断是不是在创建loop的线程里
     void AssertInLoopThread() { owner_loop_->AssertInLoopThread(); }
 

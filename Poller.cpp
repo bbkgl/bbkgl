@@ -2,10 +2,11 @@
 // Created by bbkgl on 19-3-27.
 //
 
-#include "Poller.h"
 #include <poll.h>
 #include <iostream>
+#include <algorithm>
 #include "Channel.h"
+#include "Poller.h"
 
 Poller::Poller(EventLoop *loop) :
     owner_loop_(loop)
@@ -98,7 +99,7 @@ void Poller::UpdateChannel(Channel *channel)
         assert(0 <= idx && idx < static_cast<int>(pollfds_.size()));
         // 找到channel对应的pollfd（注意这里是引用）
         struct pollfd &pfd = pollfds_[idx];
-        assert(pfd.fd == channel->GetFd() || pfd.fd == -1);
+        assert(pfd.fd == channel->GetFd() || pfd.fd == -channel->GetFd() - 1);
         // 更改channel对应的pollfd对应的关心的事件
         pfd.events = static_cast<short>(channel->GetEvents());
 
@@ -108,7 +109,46 @@ void Poller::UpdateChannel(Channel *channel)
         // 如果channel暂时不关心任何事件，就把pollfd.fd设为-1，让poller忽略这个channel
         if (channel->IsNoneEvent())
         {
-            pfd.fd = -1;
+            pfd.fd = -channel->GetFd()-1;
         }
+    }
+}
+
+void Poller::RemoveChannel(Channel *channel)
+{
+    AssertInLoopThread();
+    std::cout << "fd = " << channel->GetFd() << std::endl;
+
+    // 以下步骤在pollfds_和channels_中找到channel
+    // 找到了
+    assert(channels_.find(channel->GetFd()) != channels_.end());
+    assert(channels_[channel->GetFd()] == channel);
+    // 确实channel已经执行过DisableAll了
+    assert(channel->IsNoneEvent());
+    int idx = channel->GetIndex();
+    assert(0 <= idx && idx < static_cast<int>(pollfds_.size()));
+    const struct pollfd &pfd = pollfds_[idx];
+    (void)pfd;
+    assert(pfd.fd == -channel->GetFd()-1 && pfd.events == channel->GetEvents());
+
+    // channels_中删除
+    size_t n = channels_.erase(channel->GetFd());
+
+    assert(n == 1);
+    (void)n;
+
+    if (idx == pollfds_.size() - 1)
+        pollfds_.pop_back();
+    else
+    {
+        int channel_at_end = pollfds_.back().fd;
+        // 将找到的元素位置和最后的元素交换
+        std::iter_swap(pollfds_.begin() + idx, pollfds_.end() - 1);
+        if (channel_at_end < 0)
+            channel_at_end = -channel_at_end - 1;
+        // channels_设置新的下一个元素索引
+        channels_[channel_at_end]->SetIndex(idx);
+        // pop掉最后一个元素
+        pollfds_.pop_back();
     }
 }

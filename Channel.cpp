@@ -18,7 +18,7 @@ Channel::Channel(EventLoop *loop, int fd) :
     events_(0),
     revents_(0),
     index_(-1),
-    event_handling_(false),
+    event_handling_(false)
 {}
 
 Channel::~Channel()

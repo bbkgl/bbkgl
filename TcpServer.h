@@ -32,6 +32,9 @@ private:
     // 建立新连接
     void NewConnection(int sockfd, const InetAddress &peer_addr);
 
+    // 删除一个连接
+    void RemoveConnection(const TcpConnectionPtr &conn);
+
     EventLoop *loop_;
 
     const std::string name_;
@@ -46,7 +49,7 @@ private:
     // 是否已经开始了运行
     bool started_;
 
-    // ？？？
+    // 下一个连接的索引
     int next_conn_id_;
 
     // 根据名字设置的连接的映射

@@ -53,6 +53,9 @@ public:
     // 更新所在loop所在Channel的事件种类
     void UpdateChannel(Channel *channel);
 
+    // 删除某个Channel对象
+    void RemoveChannel(Channel *);
+
     // 如果当前线程不是创建对象时的线程，就报错
     void AssertInLoopThread()
     {
