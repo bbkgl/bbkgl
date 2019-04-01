@@ -109,6 +109,7 @@ void TcpConnection::HandleClose()
     channel_->DisableAll();
     // 调用TcpServer绑定的函数
     close_callback_ (shared_from_this());
+
 }
 
 void TcpConnection::HandleError()

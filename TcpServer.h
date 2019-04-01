@@ -35,6 +35,8 @@ private:
     // 删除一个连接
     void RemoveConnection(const TcpConnectionPtr &conn);
 
+    void RemoveConnectionInLoop(const TcpConnectionPtr &conn);
+
     EventLoop *loop_;
 
     const std::string name_;
