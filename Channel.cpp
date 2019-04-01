@@ -17,8 +17,15 @@ Channel::Channel(EventLoop *loop, int fd) :
     fd_(fd),
     events_(0),
     revents_(0),
-    index_(-1)
+    index_(-1),
+    event_handling_(false),
 {}
+
+Channel::~Channel()
+{
+    // 断言，Channel对象不处于事件处理状态
+    assert(!event_handling_);
+}
 
 // 更新事件，Update()函数会调用loop_->UpdateChannel()，然后又调用Poller::UpdateChannel()
 void Channel::Update()
@@ -29,24 +36,37 @@ void Channel::Update()
 // Channel的核心，由EventLoop::loop()调用
 void Channel::HandleEvent()
 {
+    // 标记正在处理事件
+    event_handling_ = true;
     // 警告事件活跃
     if (revents_ & POLLNVAL)
         std::cout << "Channel::handle_event() POLLNVAL";
 
+    // 对方关闭了连接
+    if ((revents_ & POLLHUP) && !(revents_ & POLLIN))
+    {
+        std::cout << "WARN! Channel::HandleEvent() POLLHUP" << std::endl;
+        if (close_callback_)
+            close_callback_();
+    }
+
     // 错误事件活跃
     if (revents_ & (POLLERR | POLLNVAL))
-        if (ErrorCallback_)
-            ErrorCallback_();
+        if (error_callback_)
+            error_callback_();
 
     // 如果是读事件活跃
     if (revents_ & (POLLIN | POLLPRI | POLLRDHUP))
-        if (ReadCallback_)
-            ReadCallback_();
+        if (read_callback_)
+            read_callback_();
 
     // 写事件活跃
     if (revents_ & POLLOUT)
-        if (WriteCallback_)
-            WriteCallback_();
+        if (write_callback_)
+            write_callback_();
+
+    // 标记事件处理完成，进入非处理状态
+    event_handling_ = false;
 }
 
 

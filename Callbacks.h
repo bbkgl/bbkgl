@@ -20,4 +20,7 @@ using ConnectionCallback = std::function<void(const TcpConnectionPtr &)>;
 // 消息回调
 using MessageCallback = std::function<void(const TcpConnectionPtr&, const char *, ssize_t)>;
 
+// 客户端连接主动挂起回调
+using CloseCallback = std::function<void(const TcpConnectionPtr &)>;
+
 #endif //BBKGL_CALLBACKS_H

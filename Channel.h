@@ -19,15 +19,19 @@ public:
 
     Channel(EventLoop *loop, int fd);
 
+    ~Channel();
+
     // 分发事件
     void HandleEvent();
 
-    // 设置读回调事件
-    void SetReadCallback(const EventCallback& cb) { ReadCallback_ = cb; }
-    // 设置写回调事件
-    void SetWriteCallback(const EventCallback& cb) { WriteCallback_ = cb; }
-    // 设置错误回调事件
-    void SetErrorCallback(const EventCallback& cb) { ErrorCallback_ = cb; }
+    // 设置读回调
+    void SetReadCallback(const EventCallback& cb) { read_callback_ = cb; }
+    // 设置写回调
+    void SetWriteCallback(const EventCallback& cb) { write_callback_ = cb; }
+    // 设置错误回调
+    void SetErrorCallback(const EventCallback& cb) { error_callback_ = cb; }
+    // 设置关闭连接回调
+    void SetCloseCallback(const EventCallback& cb) { close_callback_ = cb; }
 
     // 获取当前文件描述符
     int GetFd() const { return fd_; }
@@ -75,9 +79,14 @@ private:
     // index由poll/epoll调用，表示的是在Epoller::pollfds_列表中的位置
     int        index_;
 
-    EventCallback ReadCallback_;
-    EventCallback WriteCallback_;
-    EventCallback ErrorCallback_;
+    // 标记Channel是否在事件处理期间，保证此段时间Channel对象不会析构
+    bool event_handling_;
+
+    EventCallback read_callback_;
+    EventCallback write_callback_;
+    EventCallback error_callback_;
+    // 来自TcpConnection对象构造时传入的回调
+    EventCallback close_callback_;
 };
 
 
