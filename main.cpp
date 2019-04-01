@@ -39,8 +39,8 @@
 
 /*------------------------------------2019.04.01 22:41更新-------------------------------------*/
 // 才发现我误会陈硕大哥了。。。
-// loop_->QueeuInLoop(std::bind(&TcpConnection::connectDestroyed, conn));
-// 我看成了loop_->RunInLoop(std::bind(&TcpConnection::connectDestroyed, conn));
+// loop_->QueeuInLoop(std::bind(&TcpConnection::ConnectDestroyed, conn));
+// 我看成了loop_->RunInLoop(std::bind(&TcpConnection::ConnectDestroyed, conn));
 // 啊！！！！！！！！！！！！！！！！！！折腾了一下午 + 一晚上。。。。不过更熟悉整个流程了～～～～
 
 
