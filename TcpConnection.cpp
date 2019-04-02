@@ -66,7 +66,7 @@ void TcpConnection::ConnDestroyed()
     loop_->AssertInLoopThread();
     assert(state_ == k_connected);
     SetState(k_disconnected);
-    channel_->DisableAll();
+    channel_->DisableAll();                     // 每断开一次连接，Channel::DisableAll()会被调用两次
     conn_callback_(shared_from_this());         // 注意这里是调用用户设置的conn_callback_回调
 
     loop_->RemoveChannel(channel_.get());
@@ -110,7 +110,7 @@ void TcpConnection::HandleClose()
     std::cout << "WARN!TcpConnection::HandleClose state = " << state_ << std::endl;
     assert(state_ == k_connected);
     // 本Channel会不关注所有事件，即将被析构
-    channel_->DisableAll();
+    channel_->DisableAll();                        // 每断开一次连接，Channel::DisableAll()会被调用两次
     // 调用TcpServer绑定的函数
     close_callback_ (shared_from_this());
 
