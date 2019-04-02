@@ -29,7 +29,7 @@ void OnMessage(const TcpConnectionPtr &conn,
 
 int main()
 {
-    printf("test8_1: pid = %d\n", getpid());
+    printf("test8_2: pid = %d\n", getpid());
 
     InetAddress listen_addr(2333);
     EventLoop loop;
