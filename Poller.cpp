@@ -70,7 +70,7 @@ void Poller::UpdateChannel(Channel *channel)
     AssertInLoopThread();
 
     // 打印当前的文件描述符对应的事件
-    std::cout << "fd = " << channel->GetFd() << " events = " << channel->GetEvents() << std::endl;
+    std::cout << "[Poller::UpdateChannel()] fd = " << channel->GetFd() << " events = " << channel->GetEvents() << std::endl;
     // 如果响应的是一个新的channel，需要即使更新poller中的channels_和pollfds_
     if (channel->GetIndex() < 0)
     {

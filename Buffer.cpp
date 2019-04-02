@@ -24,4 +24,5 @@ ssize_t Buffer::ReadFd(int fd, int *saved_errno)
         writer_index_ = buffer_.size();
         Append(extrabuf, n - writable);
     }
+    return n;
 }
