@@ -128,7 +128,7 @@ void TcpConnection::ConnEstablished()
 void TcpConnection::ConnDestroyed()
 {
     loop_->AssertInLoopThread();
-    assert(state_ == k_connected);
+    assert(state_ == k_connected || state_ == k_disconnecting);
     SetState(k_disconnected);
     channel_->DisableAll();                     // 每断开一次连接，Channel::DisableAll()会被调用两次
     conn_callback_(shared_from_this());         // 注意这里是调用用户设置的conn_callback_回调
@@ -164,7 +164,30 @@ void TcpConnection::HandleRead(Timestamp recv_time)
 
 void TcpConnection::HandleWrite()
 {
-
+    loop_->AssertInLoopThread();
+    if (channel_->IsWriting())
+    {
+        // 将之前output_buffer_中存入剩余的数据发出去
+        ssize_t n = write(channel_->GetFd(), output_buffer_.Peek(), output_buffer_.ReadableBytes());
+        // 如果成功发出数据
+        if (n > 0)
+        {
+            // 将成功发出的数据从output_buffer_中抹去
+            output_buffer_.Retrieve(n);
+            // 如果抹去的是所有的数据，那就说明本次写事件完成，取消关注写事件
+            if (output_buffer_.ReadableBytes() == 0)
+            {
+                channel_->DisableWriting();
+                // 如果已经进入关闭连接的状态，则关闭连接
+                if (state_ == k_disconnecting)
+                    ShutdownInLoop();
+            }
+            else
+                std::cerr << "TcpConnection::HandleWrite\n";
+        }
+        else
+            std::cout << "Connection is down, no more writing.\n";
+    }
 }
 
 
@@ -172,7 +195,7 @@ void TcpConnection::HandleClose()
 {
     loop_->AssertInLoopThread();
     std::cout << "WARN!TcpConnection::HandleClose state = " << state_ << std::endl;
-    assert(state_ == k_connected);
+    assert(state_ == k_connected || state_ == k_disconnecting);
     // 本Channel会不关注所有事件，即将被析构
     channel_->DisableAll();                        // 每断开一次连接，Channel::DisableAll()会被调用两次
     // 调用TcpServer绑定的函数
@@ -183,7 +206,10 @@ void TcpConnection::HandleClose()
 void TcpConnection::HandleError()
 {
     // 获取错误信息
+    std::string  info_err = "";
     int err = sockets::GetSocketError(socket_->GetFd());
+    if (errno == 11) info_err = "EAGAIN";
+    else info_err.push_back(err + '0');
     std::cerr << "TcpConnection::handleError [" << name_
-              << "] - SO_ERROR = " << err << " " << std::endl;
+              << "] - SO_ERROR = " << info_err << std::endl;
 }

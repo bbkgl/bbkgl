@@ -74,7 +74,7 @@ public:
     }
 
     // 取出所有的可读区域的字符串
-    std::string RetriveAsString()
+    std::string RetrieveAsString()
     {
         std::string str(Peek(), ReadableBytes());
         RetrieveAll();
