@@ -9,14 +9,16 @@
 EventLoop *g_loop;
 
 // 读事件回调函数。。。也就是最后EventLoop::HandleEvent()执行的函数
-void timeout()
+void timeout(Timestamp recv_time)
 {
-    printf("Timeout!\n");
+    printf("%s Timeout!\n", Timestamp::now().toFormattedString().c_str());
     g_loop->Quit();
 }
 
 int main()
 {
+    printf("%s started!\n", Timestamp::now().toFormattedString().c_str());
+
     // g_loop指针调用EventLoop::Quit()函数退出Loop()循环
     EventLoop loop;
     g_loop = &loop;

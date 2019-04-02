@@ -22,7 +22,7 @@ TcpConnection::TcpConnection(EventLoop *loop, const std::string &name, int sockf
 {
     std::cout << "TcpConnection:ctor[" << name_ << "] at " << this
                                                            << " fd = " << sockfd << std::endl;
-    channel_->SetReadCallback(std::bind(&TcpConnection::HandleRead, this));
+    channel_->SetReadCallback(std::bind(&TcpConnection::HandleRead, this, std::placeholders::_1));
     // 其实我觉得下面三句都是没必要的，因为HandleRead()本来就会调用下面的三个函数，
     // 最后也是在Channel::read_callback()中被调用，实际上Channel::read_callback()
     // 就会调用TcpConnection::HandleRead()，HandleRead()根据情况调用以下三个函数，
@@ -72,11 +72,10 @@ void TcpConnection::ConnDestroyed()
     loop_->RemoveChannel(channel_.get());
 }
 
-void TcpConnection::HandleRead()
+void TcpConnection::HandleRead(Timestamp recv_time)
 {
-    char buf[65536];
-    // 读取客户端发送的消息
-    ssize_t n = read(channel_->GetFd(), buf, sizeof(buf));
+    int saved_errno = 0;
+    ssize_t n = input_buffer_.ReadFd(channel_->GetFd(), &saved_errno);
     // 通过回调函数与客户端进行通信
     // msg_callback_本身由客户在Server中设置
     // 哇，这里贼坑。陈硕书上继承的是boost::enable_shared_from_this<TcpConnection>
@@ -88,10 +87,15 @@ void TcpConnection::HandleRead()
     // 然后将继承对象改成std::enable_shared_from_this<TcpConnection>，
     // 可以使用shared_from_this()直接获得this指针的shared_ptr。
     if (n > 0)
-        msg_callback_(shared_from_this(), buf, n);
+        msg_callback_(shared_from_this(), &input_buffer_, recv_time);
     else if (n == 0)              // 当读到的数据长度为0时，说明客户端主动断开了连接
         HandleClose();
-    else HandleError();
+    else
+    {
+        errno = saved_errno;
+        std::cerr << "TcpConnection::handleRead\n";
+        HandleError();
+    }
 }
 
 void TcpConnection::HandleWrite()

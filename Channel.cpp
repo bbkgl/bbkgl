@@ -34,7 +34,7 @@ void Channel::Update()
 }
 
 // Channel的核心，由EventLoop::loop()调用
-void Channel::HandleEvent()
+void Channel::HandleEvent(Timestamp recv_time)
 {
     // 标记正在处理事件
     event_handling_ = true;
@@ -58,7 +58,7 @@ void Channel::HandleEvent()
     // 如果是读事件活跃
     if (revents_ & (POLLIN | POLLPRI | POLLRDHUP))
         if (read_callback_)
-            read_callback_();
+            read_callback_(recv_time);
 
     // 写事件活跃
     if (revents_ & POLLOUT)

@@ -130,7 +130,8 @@ public:
         buf.swap(buffer_);
     }
 
-    ssize_t ReadFd(int fd, int *save)
+    /*供外界调用的功能函数，读取socket文件内容*/
+    ssize_t ReadFd(int fd, int *saved_errno);
 
 private:
     // 获取最左端的指针

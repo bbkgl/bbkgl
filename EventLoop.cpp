@@ -83,13 +83,13 @@ void EventLoop::Loop()
         active_channels_.clear();
 
         // 传地址进去，方便Epoller::poll函数对active_channels_进行改动
-        poller_->Poll(k_poll_time_ms, &active_channels_);
+        poll_return_time_ = poller_->Poll(k_poll_time_ms, &active_channels_);
 
         // 经过返回的active_channels_里面都是活跃的channel，遍历其中活跃的，然后进行事件处理
         for (ChannelList::iterator it = active_channels_.begin();
                 it != active_channels_.end(); it++)
         {
-            (*it)->HandleEvent();
+            (*it)->HandleEvent(poll_return_time_);
         }
         // 执行其他线程传入的回调函数
         DoPendingFunctors();

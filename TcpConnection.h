@@ -10,6 +10,7 @@
 #include <memory>
 #include "Callbacks.h"
 #include "base/InetAddress.h"
+#include "Buffer.h"
 
 class Channel;
 class EventLoop;
@@ -54,7 +55,7 @@ public:
     void ConnDestroyed();
 
     // 这就是建立连接后的通信工作了
-    void HandleRead();
+    void HandleRead(Timestamp recv_time);
     void HandleWrite();
     void HandleError();
     void HandleClose();
@@ -100,6 +101,8 @@ private:
 
     // 用于关闭连接的回调函数
     CloseCallback close_callback_;
+
+    Buffer input_buffer_;
 
 };
 

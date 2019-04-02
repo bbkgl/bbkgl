@@ -9,6 +9,8 @@
 #include <boost/core/noncopyable.hpp>
 #include <functional>
 
+#include "Timestamp.h"
+
 class EventLoop;
 
 class Channel : boost::noncopyable
@@ -16,16 +18,18 @@ class Channel : boost::noncopyable
 public:
     // using的作用和typedef差不多
     using EventCallback = std::function<void()>;
+    using ReadEventCallback = std::function<void(Timestamp)>;
 
     Channel(EventLoop *loop, int fd);
 
     ~Channel();
 
     // 分发事件
-    void HandleEvent();
+    void HandleEvent(Timestamp recv_time);
+
 
     // 设置读回调
-    void SetReadCallback(const EventCallback& cb) { read_callback_ = cb; }
+    void SetReadCallback(const ReadEventCallback& cb) { read_callback_ = cb; }
     // 设置写回调
     void SetWriteCallback(const EventCallback& cb) { write_callback_ = cb; }
     // 设置错误回调
@@ -82,7 +86,7 @@ private:
     // 标记Channel是否在事件处理期间，保证此段时间Channel对象不会析构
     bool event_handling_;
 
-    EventCallback read_callback_;
+    ReadEventCallback read_callback_;
     EventCallback write_callback_;
     EventCallback error_callback_;
     // 来自TcpConnection对象构造时传入的回调
