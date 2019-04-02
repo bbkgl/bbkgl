@@ -109,7 +109,8 @@ void EventLoop::Quit()
     if (!IsInLoopThread())
         Wakeup();
 
-    /* 为什么EventLoop自己的IO线程调用Qiut()的时候不用唤醒呢？
+    /*
+     * 为什么EventLoop自己的IO线程调用Qiut()的时候不用唤醒呢？
      * 因为自己都能调用Quit()了。。。那就说明没有被阻塞，不用唤醒。。。
      *
      * */
