@@ -117,7 +117,7 @@ void Poller::UpdateChannel(Channel *channel)
 void Poller::RemoveChannel(Channel *channel)
 {
     AssertInLoopThread();
-    std::cout << "fd = " << channel->GetFd() << std::endl;
+//    std::cout << "fd = " << channel->GetFd() << std::endl;
 
     // 以下步骤在pollfds_和channels_中找到channel
     // 找到了

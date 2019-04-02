@@ -22,14 +22,17 @@ void OnMessage(const TcpConnectionPtr &conn,
                Buffer *data,
                Timestamp recv_time)
 {
+    std::string recv = data->RetriveAsString();
     printf("OnMessage(): received %zd bytes from connection [%s] at %s\n",
            data->ReadableBytes(), conn->GetName().c_str(), recv_time.toFormattedString().c_str());
-    printf("OnMessage: [%s]\n", data->RetriveAsString().c_str());
+    printf("OnMessage: [%s]\n", recv.substr(0, recv.length() - 2).c_str());
+
+    conn->Send(recv);
 }
 
 int main()
 {
-    printf("test8_1: pid = %d\n", getpid());
+    printf("test9: pid = %d\n", getpid());
 
     InetAddress listen_addr(2333);
     EventLoop loop;

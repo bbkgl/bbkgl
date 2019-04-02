@@ -133,7 +133,7 @@ void TcpConnection::ConnDestroyed()
     channel_->DisableAll();                     // 每断开一次连接，Channel::DisableAll()会被调用两次
     conn_callback_(shared_from_this());         // 注意这里是调用用户设置的conn_callback_回调
 
-    loop_->RemoveChannel(channel_.get());
+    loop_->RemoveChannel(channel_.get());       // 会调用Poller::RemoveChannel()，从自己的表中删除channel
 }
 
 void TcpConnection::HandleRead(Timestamp recv_time)
