@@ -51,9 +51,11 @@ public:
 
     // 让对应种类的事件被关注，并在Poller::UpdateChannel()中更新事件列表pollfds_以及映射表
     void EnableReading() { events_ |= k_read_event; Update(); }
-//    void EnableWriting() { events_ |= k_write_event; Update(); }
-//    void DisableWriting() { events_ &= ~k_write_event; Update(); }
+    void EnableWriting() { events_ |= k_write_event; Update(); }
+    void DisableWriting() { events_ &= ~k_write_event; Update(); }
     void DisableAll() { events_ = k_none_event; Update(); }
+    // 根据事件类型判断当前连接是否仍然关注写事件，如果不是关注写事件，会调用EnableWriting()
+    bool IsWriting() const { return events_ & k_write_event; }
 
     // Poller中要调用的函数，返回当前channel在Poller映射表中的位置
     int GetIndex() { return index_; }

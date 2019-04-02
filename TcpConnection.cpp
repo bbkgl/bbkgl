@@ -38,6 +38,70 @@ TcpConnection::~TcpConnection()
               << " fd = " << channel_->GetFd() << std::endl;
 }
 
+void TcpConnection::Send(const std::string &message)
+{
+    if (state_ == k_connected)
+    {
+        // 保证线程安全
+        if (loop_->IsInLoopThread())
+            SendInLoop(message);
+        else
+            loop_->RunInLoop(std::bind(&TcpConnection::SendInLoop, this, message));
+    }
+}
+
+void TcpConnection::SendInLoop(const std::string &message)
+{
+    loop_->AssertInLoopThread();
+    ssize_t nwrote = 0;
+    // 如果没有数据在output_buffer_中，则试图往系统的发送缓冲区直接写入
+    if (!channel_->IsWriting() && output_buffer_.ReadableBytes() == 0)
+    {
+        nwrote = write(channel_->GetFd(), message.data(), message.size());
+        // 如果数据发送成功了
+        if (nwrote >= 0)
+        {
+            if (static_cast<size_t>(nwrote) < message.size())
+                std::cout << "I am going to write more data\n";
+        }
+        else
+        {
+            nwrote = 0;
+            if (errno == EWOULDBLOCK)
+                std::cerr << "TcpConnection::SendInLoop()\n";
+        }
+    }
+    // 断言
+    assert(nwrote >= 0);
+    // 如果一次性没有全部发出去
+    if (static_cast<size_t>(nwrote) < message.size())
+    {
+        // 存到input_buffer_中
+        output_buffer_.Append(message.data() + nwrote, message.size() - nwrote);
+        // 继续关注写事件
+        if (!channel_->IsWriting())
+            channel_->EnableWriting();
+    }
+}
+
+void TcpConnection::Shutdown()
+{
+    if (state_ == k_connected)
+    {
+        // 标记处在断开连接中
+        SetState(k_disconnecting);
+        loop_->RunInLoop(std::bind(&TcpConnection::ShutdownInLoop, this));
+    }
+}
+
+void TcpConnection::ShutdownInLoop()
+{
+    loop_->AssertInLoopThread();
+    // 优雅关闭连接
+    if (!channel_->IsWriting())
+        socket_->ShutdownWrite();
+}
+
 void TcpConnection::ConnEstablished()
 {
     // 判断是不是在IO线程被调用

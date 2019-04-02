@@ -53,6 +53,9 @@ namespace sockets
 
     void Close(int sockfd);
 
+    // 优雅关闭连接
+    void ShutdownWrite(int sockfd);
+
 // 将sockaddr_in转换成"ip:port"的字符串形式，由buf接收
 // 注意这里是传引用
     void ToHostPort(char *buf, size_t size, const struct sockaddr_in &addr);

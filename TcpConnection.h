@@ -39,6 +39,11 @@ public:
 
     bool Connected() const { return state_ == k_connected; }
 
+    // 发送数据
+    void Send(const std::string &message);
+    // 优雅关闭连接
+    void Shutdown();
+
     // TcpServer创建后，用户设置回调函数，然后传入调用
     void SetConnCallback(const ConnectionCallback &cb) { conn_callback_ = cb; }
 
@@ -54,16 +59,18 @@ public:
     // 该函数传入到EventLoop::QueueInLoop()中最终回到IO线程调用
     void ConnDestroyed();
 
+private:
+    enum StateE{k_connecting, k_connected, k_disconnecting, k_disconnected};
+
+    void SetState(StateE s) { state_ = s; }
+
     // 这就是建立连接后的通信工作了
     void HandleRead(Timestamp recv_time);
     void HandleWrite();
     void HandleError();
     void HandleClose();
-
-private:
-    enum StateE{k_connecting, k_connected, k_disconnected};
-
-    void SetState(StateE s) { state_ = s; }
+    void SendInLoop(const std::string &message);
+    void ShutdownInLoop();
 
     // 不谈了
     EventLoop *loop_;
@@ -102,7 +109,9 @@ private:
     // 用于关闭连接的回调函数
     CloseCallback close_callback_;
 
-    Buffer input_buffer_;
+    // 输入输出缓冲区
+    Buffer input_buffer_;                // 接收数据缓冲区
+    Buffer output_buffer_;               // 发送数据缓冲区
 
 };
 

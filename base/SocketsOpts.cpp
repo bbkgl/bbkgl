@@ -119,6 +119,12 @@ void sockets::Close(int sockfd)
         std::cerr << "SocketsOpts---Close\n";
 }
 
+void sockets::ShutdownWrite(int sockfd)
+{
+    if (shutdown(sockfd, SHUT_WR) < 0)
+        std::cerr << "sockets::ShutdownWrite()\n";
+}
+
 void sockets::ToHostPort(char *buf, size_t size, const struct sockaddr_in &addr)
 {
     char host[INET_ADDRSTRLEN] = "INVALId";

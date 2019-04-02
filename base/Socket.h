@@ -24,6 +24,7 @@ public:
 
     void SetReUseAddr(bool on);
 
+    void ShutdownWrite();
 
 private:
     const int sockfd_;

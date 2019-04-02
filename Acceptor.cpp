@@ -63,5 +63,3 @@ void Acceptor::HandleRead()
             sockets::Close(connfd);
     }
 }
-
-
