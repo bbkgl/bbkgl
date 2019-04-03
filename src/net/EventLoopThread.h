@@ -11,7 +11,7 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
-#include <boost/core/noncopyable.hpp>
+#include <boost/noncopyable.hpp>
 
 // 前置声明
 class EventLoop;

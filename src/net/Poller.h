@@ -6,7 +6,7 @@
 #define BBKGL_POLLER_H
 
 #include <vector>
-#include <boost/core/noncopyable.hpp>
+#include <boost/noncopyable.hpp>
 #include "Timestamp.h"
 #include <map>
 #include "EventLoop.h"

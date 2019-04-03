@@ -2,7 +2,7 @@
 #define BBKGL_TIMERQUEUE_H
 
 
-#include <boost/core/noncopyable.hpp>
+#include <boost/noncopyable.hpp>
 #include <set>
 #include <vector>
 #include <thread>

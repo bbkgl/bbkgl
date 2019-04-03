@@ -5,7 +5,7 @@
 #ifndef BBKGL_TCPCONNECTION_H
 #define BBKGL_TCPCONNECTION_H
 
-#include <boost/core/noncopyable.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <memory>
 #include "Callbacks.h"

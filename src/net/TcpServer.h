@@ -5,7 +5,7 @@
 #ifndef BBKGL_TCPSERVER_H
 #define BBKGL_TCPSERVER_H
 
-#include <boost/core/noncopyable.hpp>
+#include <boost/noncopyable.hpp>
 #include <map>
 #include <memory>
 #include "Callbacks.h"

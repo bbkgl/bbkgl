@@ -6,7 +6,7 @@
 #define BBKGL_EVENTLOOPTHREADPOOL_H
 
 
-#include <boost/core/noncopyable.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
 #include <memory>
