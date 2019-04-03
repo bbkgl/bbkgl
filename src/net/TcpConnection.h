@@ -9,7 +9,7 @@
 #include <boost/enable_shared_from_this.hpp>
 #include <memory>
 #include "Callbacks.h"
-#include "base/InetAddress.h"
+#include "InetAddress.h"
 #include "Buffer.h"
 
 class Channel;

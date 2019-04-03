@@ -1,9 +1,9 @@
 #include "TcpConnection.h"
 #include "Channel.h"
 #include "EventLoop.h"
-#include "base/Socket.h"
+#include "Socket.h"
 #include "Acceptor.h"
-#include "base/SocketsOpts.h"
+#include "SocketsOpts.h"
 
 #include <cstdio>
 #include <errno.h>

@@ -1,6 +1,7 @@
 #include <cstdio>
+#include <Callbacks.h>
 #include "EventLoop.h"
-#include "base/InetAddress.h"
+#include "InetAddress.h"
 #include "TcpServer.h"
 
 std::string msg;
@@ -43,7 +44,7 @@ void OnMessage(const TcpConnectionPtr &conn,
     std::string recv = data->RetrieveAsString();
     printf("OnMessage(): received %zd bytes from connection [%s] at %s\n",
            data->ReadableBytes(), conn->GetName().c_str(), recv_time.toFormattedString().c_str());
-    printf("OnMessage: [%s]\n", recv.substr(0, recv.length() - 2).c_str());
+    printf("OnMessage: [%s]\n", recv.substr(0, recv.length() - 1).c_str());
 }
 
 int main()

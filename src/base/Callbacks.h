@@ -1,7 +1,3 @@
-//
-// Created by bbkgl on 19-3-28.
-//
-
 #ifndef BBKGL_CALLBACKS_H
 #define BBKGL_CALLBACKS_H
 
