@@ -5,6 +5,7 @@
 #include "TcpServer.h"
 #include "Acceptor.h"
 #include "EventLoop.h"
+#include "EventLoopThreadPool.h"
 #include "SocketsOpts.h"
 #include <cstdio>
 #include <iostream>
@@ -13,6 +14,7 @@ TcpServer::TcpServer(EventLoop *loop, const InetAddress &listen_addr) :
     loop_(loop),
     name_(listen_addr.ToHostPort()),
     acceptor_(new Acceptor(loop, listen_addr)),
+    thread_pool_(new EventLoopThreadPool(loop)),
     started_(false),
     next_conn_id_(1)               // 这是唯一标记连接的，最后用来生成一台服务器上所有连接TcpConnection的映射
 {
@@ -29,10 +31,19 @@ TcpServer::~TcpServer()
 
 }
 
+void TcpServer::SetThreadNum(int num_threads)
+{
+    assert(0 <= num_threads);
+    thread_pool_->SetThreadNum(num_threads);
+}
+
 void TcpServer::Start()
 {
     if (!started_)
+    {
         started_ = true;
+        thread_pool_->Start();
+    }
     if (!acceptor_->Listenning())
         // 这里之前郁闷了好久，才想起来这里用的智能指针unique_ptr，所以不能直接传acceptor_
         // 使用loop_->RunInLoop()
@@ -59,9 +70,12 @@ void TcpServer::NewConnection(int sockfd, const InetAddress &peer_addr)
     // 本地host
     InetAddress local_addr(sockets::GetLocalAddr(sockfd));
 
+    // 对新的连接用刚刚调度出的EventLoop线程去处理
+    EventLoop *io_loop = thread_pool_->GetNextLoop();
+
     // 构造新的连接对象TcpConnection
     TcpConnectionPtr conn(
-            new TcpConnection(loop_, conn_name, sockfd, local_addr, peer_addr));
+            new TcpConnection(io_loop, conn_name, sockfd, local_addr, peer_addr));
     // 生成映射
     connections_[conn_name] = conn;
     // 设置用户传入的回调
@@ -70,7 +84,7 @@ void TcpServer::NewConnection(int sockfd, const InetAddress &peer_addr)
     conn->SetWriteCompleteCallback(write_complete_callback_);
     conn->SetCloseCallback(std::bind(&TcpServer::RemoveConnection, this, std::placeholders::_1));
     // 建立连接以后，conn->ConnEstablished()首先进行标记，然后会区poller中注册可读事件，最后调用用户设定的回调函数
-    conn->ConnEstablished();
+    io_loop->RunInLoop(std::bind(&TcpConnection::ConnEstablished, conn));
 }
 
 void TcpServer::RemoveConnection(const TcpConnectionPtr &conn)

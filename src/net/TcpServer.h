@@ -13,6 +13,7 @@
 
 class Acceptor;
 class EventLoop;
+class EventLoopThreadPool;
 
 class TcpServer : boost::noncopyable
 {
@@ -21,6 +22,9 @@ public:
     ~TcpServer();
 
     void Start();
+
+    // 设置线程数
+    void SetThreadNum(int num);
 
     void SetConnCallback(const ConnectionCallback &cb) { conn_callback_ = cb; }
 
@@ -46,6 +50,9 @@ private:
 
     // 服务器接收新连接的接收器
     std::unique_ptr<Acceptor> acceptor_;
+
+    // 线程池
+    std::unique_ptr<EventLoopThreadPool> thread_pool_;
 
     // 供用户设置的回调函数
     ConnectionCallback conn_callback_;

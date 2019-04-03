@@ -31,7 +31,7 @@ Timestamp Poller::Poll(int timeout_ms, Poller::ChannelList *active_channels)
         std::cout << num_events << " events happended\n";
         FillActiveChannels(num_events, active_channels);
     } else if (num_events == 0)
-        std::cout << " nothing happended\n";
+        std::cout << "[Poller::poll]nothing happended\n";
     else
         std::cerr << "Poller::Poll Error\n";
     // 返回当前时间
