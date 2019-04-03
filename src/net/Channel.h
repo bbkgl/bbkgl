@@ -6,7 +6,7 @@
 #define BBKGL_CHANNEL_H
 
 
-#include <boost/core/noncopyable.hpp>
+#include <boost/noncopyable.hpp>
 #include <functional>
 
 #include "Timestamp.h"
