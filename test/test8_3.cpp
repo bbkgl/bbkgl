@@ -40,6 +40,7 @@ int main()
     TcpServer server(&loop, listen_addr);
     server.SetConnCallback(OnConnection);
     server.SetMsgCallback(OnMessage);
+    server.SetThreadNum(4);
     server.Start();
 
     loop.Loop();
