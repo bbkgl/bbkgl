@@ -26,6 +26,9 @@ public:
 
     void SetMsgCallback(const MessageCallback &cb) { msg_callback = cb; }
 
+    void SetWriteCompleteCallback(const WriteCompleteCallback &cb)
+    { write_complete_callback_ = cb; }
+
 private:
     using ConnectionMap = std::map<std::string, TcpConnectionPtr>;
 
@@ -47,6 +50,7 @@ private:
     // 供用户设置的回调函数
     ConnectionCallback conn_callback_;
     MessageCallback msg_callback;
+    WriteCompleteCallback write_complete_callback_;
 
     // 是否已经开始了运行
     bool started_;

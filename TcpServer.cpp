@@ -67,6 +67,7 @@ void TcpServer::NewConnection(int sockfd, const InetAddress &peer_addr)
     // 设置用户传入的回调
     conn->SetConnCallback(conn_callback_);
     conn->SetMsgCallback(msg_callback);
+    conn->SetWriteCompleteCallback(write_complete_callback_);
     conn->SetCloseCallback(std::bind(&TcpServer::RemoveConnection, this, std::placeholders::_1));
     // 建立连接以后，conn->ConnEstablished()首先进行标记，然后会区poller中注册可读事件，最后调用用户设定的回调函数
     conn->ConnEstablished();

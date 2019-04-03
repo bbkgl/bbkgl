@@ -63,6 +63,9 @@ void TcpConnection::SendInLoop(const std::string &message)
         {
             if (static_cast<size_t>(nwrote) < message.size())
                 std::cout << "I am going to write more data\n";
+            // 调用用户设置的低水位回调函数
+            else if (write_complete__callback_)
+                loop_->QueueInLoop(std::bind(write_complete__callback_, shared_from_this()));
         }
         else
         {
