@@ -2,6 +2,7 @@
 #include "InetAddress.h"
 #include "SocketsOpts.h"
 #include <cstring>
+#include <netinet/tcp.h>
 
 Socket::~Socket()
 {
@@ -37,6 +38,13 @@ void Socket::SetReUseAddr(bool on)
 void Socket::ShutdownWrite()
 {
     sockets::ShutdownWrite(sockfd_);
+}
+
+// 禁用Nagle算法降低延迟
+void Socket::SetTcpNoDelay(bool on)
+{
+    int optval = on ? 1 : 0;
+    setsockopt(sockfd_, IPPROTO_TCP, TCP_NODELAY, &optval, sizeof(optval));
 }
 
 

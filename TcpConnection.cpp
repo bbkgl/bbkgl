@@ -102,6 +102,11 @@ void TcpConnection::ShutdownInLoop()
         socket_->ShutdownWrite();
 }
 
+void TcpConnection::SetTcpNoDelay(bool on)
+{
+    socket_->SetTcpNoDelay(true);
+}
+
 void TcpConnection::ConnEstablished()
 {
     // 判断是不是在IO线程被调用
@@ -178,6 +183,11 @@ void TcpConnection::HandleWrite()
             if (output_buffer_.ReadableBytes() == 0)
             {
                 channel_->DisableWriting();
+
+                // 调用用户设置的低水位回调函数
+                if (write_complete__callback_)
+                    loop_->QueueInLoop(std::bind(write_complete__callback_, shared_from_this()));
+
                 // 如果已经进入关闭连接的状态，则关闭连接
                 if (state_ == k_disconnecting)
                     ShutdownInLoop();

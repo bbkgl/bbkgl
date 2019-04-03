@@ -43,6 +43,8 @@ public:
     void Send(const std::string &message);
     // 优雅关闭连接
     void Shutdown();
+    // 关闭Nagle算法，降低延迟
+    void SetTcpNoDelay(bool on);
 
     // TcpServer创建后，用户设置回调函数，然后传入调用
     void SetConnCallback(const ConnectionCallback &cb) { conn_callback_ = cb; }
@@ -52,6 +54,10 @@ public:
 
     // 由HandleRead()调用，HandleRead()会被传入到Channel中
     void SetCloseCallback(const CloseCallback &cb) { close_callback_ = cb; }
+
+    // 设置低水位回调函数，由用户设置，由TcpServer传入
+    void SetWriteCompleteCallback(const WriteCompleteCallback &cb)
+    { write_complete__callback_ = cb; }
 
     // 在TcpServer::NewConnection()中被调用，也就是说是建立连接后的后续工作
     void ConnEstablished();
@@ -108,6 +114,9 @@ private:
 
     // 用于关闭连接的回调函数
     CloseCallback close_callback_;
+
+    // 低水位回调
+    WriteCompleteCallback write_complete__callback_;
 
     // 输入输出缓冲区
     Buffer input_buffer_;                // 接收数据缓冲区

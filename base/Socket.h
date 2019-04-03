@@ -26,6 +26,9 @@ public:
 
     void ShutdownWrite();
 
+    // 禁用Nagle算法
+    void SetTcpNoDelay(bool on);
+
 private:
     const int sockfd_;
 };

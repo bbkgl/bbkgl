@@ -2,6 +2,7 @@
 #include <iostream>
 #include <poll.h>
 #include <sys/eventfd.h>
+#include <signal.h>
 
 #include "Poller.h"
 #include "Channel.h"
@@ -26,6 +27,18 @@ static int CreateEventFd()
     }
     return evfd;
 }
+
+// 让服务器进程忽略SIGPIPE错误信号
+class IgnoreSigPipe
+{
+public:
+    IgnoreSigPipe()
+    {
+        signal( SIGPIPE, SIG_IGN);
+    }
+};
+
+IgnoreSigPipe initObj;         // 让signal()函数在服务器进程开始的时候就运行
 
 // EventLoop对象创建时，looping属性会被赋值为false，对象销毁时，会判断这个值是不是false
 EventLoop::EventLoop()

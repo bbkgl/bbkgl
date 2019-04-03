@@ -25,4 +25,7 @@ using MessageCallback = std::function<void(const TcpConnectionPtr&, Buffer *, Ti
 // 客户端连接主动挂起回调
 using CloseCallback = std::function<void(const TcpConnectionPtr &)>;
 
+// 低水位回调
+using WriteCompleteCallback = std::function<void(const TcpConnectionPtr &)>;
+
 #endif //BBKGL_CALLBACKS_H
