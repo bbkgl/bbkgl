@@ -65,7 +65,19 @@ void TcpConnection::SendInLoop(const std::string &message)
                 std::cout << "I am going to write more data\n";
             // 调用用户设置的低水位回调函数
             else if (write_complete__callback_)
+            {
                 loop_->QueueInLoop(std::bind(write_complete__callback_, shared_from_this()));
+                write_complete__callback_ = nullptr;
+                /*
+                 * 这个write_complete__callback_ = nullptr;非常重要！！！！！！
+                 * 陈硕大佬的书中没有讲这个问题，没有上面这句，会陷入死循环。可以跟踪一下整个调用过程。
+                 * 系统调用write_complete__callback_，也就是chargen服务器中的OnWriteComplete()
+                 * OnWriteComplete()中继续调用TcpConnection::Send()，然后又会回到这里把write_complete__callback_放入到
+                 * 队列里，于是用户传入的OnWriteComplete()会继续执行，又会调用TcpConnection::Send()。。。。
+                 * 陷入了死循环。。。。
+                 *
+                 * */
+            }
         }
         else
         {
@@ -107,7 +119,7 @@ void TcpConnection::ShutdownInLoop()
 
 void TcpConnection::SetTcpNoDelay(bool on)
 {
-    socket_->SetTcpNoDelay(true);
+    socket_->SetTcpNoDelay(on);
 }
 
 void TcpConnection::ConnEstablished()
