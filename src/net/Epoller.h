@@ -15,7 +15,7 @@ class Epoller : boost::noncopyable
 public:
     using ChannelList = std::vector<Channel *>;
     using ChannelMap = std::map<int, Channel *>;
-    using EventList = std::vector<epoll_event>;
+    using EventList = std::vector<struct epoll_event>;
 
     Epoller(EventLoop *loop);
     ~Epoller();

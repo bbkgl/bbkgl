@@ -4,6 +4,7 @@
 #include <sys/eventfd.h>
 #include <signal.h>
 
+#include "Epoller.h"
 #include "Poller.h"
 #include "Channel.h"
 #include "TimerQueue.h"
@@ -44,7 +45,7 @@ IgnoreSigPipe initObj;         // 让signal()函数在服务器进程开始的�
 EventLoop::EventLoop()
         : looping_(false),
           thread_id_(std::this_thread::get_id()),
-          poller_(new Poller(this)),
+          poller_(new Epoller(this)),
           quit_(false),
           timer_queue_(new TimerQueue(this)),       // 会给定时器队列分配一个文件描述符，并注册读事件
           call_pending_functors_(false),

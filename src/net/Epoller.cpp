@@ -7,20 +7,29 @@
 #include <sys/poll.h>
 #include <iostream>
 #include <cstring>
+#include <boost/static_assert.hpp>
+#include <errno.h>
 
 // 在linux中，epoll()和poll()的常量都是相等的
 // 比如EPOLLIN == POLLIN等
 
-namespace
-{
-    const int k_new = -1;
-    const int k_added = 1;
-    const int k_deleted = 2;
-}
+// On Linux, the constants of poll(2) and epoll(4)
+// are expected to be the same.
+BOOST_STATIC_ASSERT(EPOLLIN == POLLIN);
+BOOST_STATIC_ASSERT(EPOLLPRI == POLLPRI);
+BOOST_STATIC_ASSERT(EPOLLOUT == POLLOUT);
+BOOST_STATIC_ASSERT(EPOLLRDHUP == POLLRDHUP);
+BOOST_STATIC_ASSERT(EPOLLERR == POLLERR);
+BOOST_STATIC_ASSERT(EPOLLHUP == POLLHUP);
+
+
+const int k_new = -1;
+const int k_added = 1;
+const int k_deleted = 2;
 
 Epoller::Epoller(EventLoop *loop) :
     owner_loop_(loop),
-    epollfd_(::epoll_create(EPOLL_CLOEXEC)),
+    epollfd_(epoll_create1(EPOLL_CLOEXEC)),
     events_(k_init_event_list_size)
 {
     if (epollfd_ < 0)
@@ -65,6 +74,7 @@ void Epoller::FillActiveChannels(int num_events, Epoller::ChannelList *active_ch
         int fd = channel->GetFd();
         ChannelMap::const_iterator it = channels_.find(fd);
         assert(it != channels_.end());
+        assert(it->second == channel);
 #endif
         channel->SetEvents(events_[i].events);
         active_channels->push_back(channel);
@@ -86,7 +96,7 @@ void Epoller::UpdateChannel(Channel *channel)
         }
         else                         // 如果是以前被删除过的
         {
-            assert(channels_.find(fd) == channels_.end());
+            assert(channels_.find(fd) != channels_.end());
             assert(channels_[fd] == channel);
         }
         // 增加事件
@@ -127,7 +137,7 @@ void Epoller::RemoveChannel(Channel *channel)
     // 如果要删除的事件之前的状态是已经添加的话，得从epoll事件表中也删除
     if (index == k_added)
         Update(EPOLL_CTL_DEL, channel);
-    channel->SetIndex(k_deleted);
+    channel->SetIndex(k_new);
 }
 
 void Epoller::Update(int operation, Channel *channel)
@@ -137,11 +147,12 @@ void Epoller::Update(int operation, Channel *channel)
     event.events = channel->GetEvents();
     event.data.ptr = channel;
     int fd = channel->GetFd();
-    if (epoll_ctl(epollfd_, operation, fd, &event) < 0);
+    if (epoll_ctl(epollfd_, operation, fd, &event) < 0)
     {
+        perror("error: ");
         if (operation == EPOLL_CTL_DEL)
-            std::cerr << "syserror: epoll_ctl op = " << " fd = " << fd << std::endl;
+            std::cerr << "syserror: epoll_ctl op = " << operation << " fd = " << fd << std::endl;
         else
-            std::cerr << "oterr: epoll_ctl op = " << " fd = " << fd << std::endl;
+            std::cerr << "oterr: epoll_ctl op = " << operation << " fd = " << fd << std::endl;
     }
 }

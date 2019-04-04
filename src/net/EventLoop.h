@@ -11,7 +11,7 @@
 #include <vector>
 #include <mutex>
 
-class Poller;
+class Epoller;
 class Channel;
 class TimerQueue;
 
@@ -95,7 +95,7 @@ private:
     const std::thread::id thread_id_;
 
     // Poller智能指针，unique_ptr保证每次只有一个指针指向Poller对象
-    std::unique_ptr<Poller> poller_;
+    std::unique_ptr<Epoller> poller_;
 
     // 活跃channel列表
     ChannelList active_channels_;
