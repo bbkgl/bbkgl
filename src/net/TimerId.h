@@ -9,12 +9,12 @@ class TimerId
 {
 public:
     // 必须显示构造对象
-    explicit TimerId(Timer *timer) :
+    explicit TimerId(std::shared_ptr<Timer> timer) :
             value_(timer)
     {}
 
 private:
-    Timer *value_;
+    std::shared_ptr<Timer> value_;
 };
 
 #endif //BBKGL_TIMERID_H

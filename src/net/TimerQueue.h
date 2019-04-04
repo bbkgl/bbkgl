@@ -30,11 +30,11 @@ public:
 private:
     // set中的数据元素是有序且是不能重复的，为了作区分，虽然说两个定时器的时间可能重合，但是地址是不可能相同的，因为是两个不相同的对象
     // 这里的Timer*使用的是原始指针，可以考虑unique_pre，其实项目里很多地方的指针都应该用智能指针，后期会做出改变
-    using Entry = std::pair<Timestamp, Timer *>;
+    using Entry = std::pair<Timestamp, std::shared_ptr<Timer>>;
     using TimerList = std::set<Entry>;
 
     // 将定时器加入到EventLoop中
-    void AddTimerInLoop(Timer *timer);
+    void AddTimerInLoop(std::shared_ptr<Timer> timer);
 
     // 当定时器时间到的时候处理事件
     void HandleRead();
@@ -46,7 +46,7 @@ private:
     void Reset(const std::vector<Entry> &expired, Timestamp now);
 
     // 新的定时器插入到队列
-    bool Insert(Timer *timer);
+    bool Insert(std::shared_ptr<Timer> timer);
 
     /*------------------------分割线，上面是方法，下面是属性---------------------------------*/
 

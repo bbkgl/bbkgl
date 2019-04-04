@@ -75,16 +75,16 @@ TimerQueue::~TimerQueue()
 {
     close(timerfd_);
 
-    // 这里暂时没有使用智能指针，所以得手动回收
-    for (TimerList::iterator it = timers_.begin();
-            it != timers_.end(); it++)
-        delete it->second;
+//    // 这里暂时没有使用智能指针，所以得手动回收
+//    for (TimerList::iterator it = timers_.begin();
+//            it != timers_.end(); it++)
+//        delete it->second;
 }
 
 TimerId TimerQueue::AddTimer(const TimerCallback &cb, Timestamp when, double interval)
 {
     // 生成一个新的定时器
-    Timer *timer = new Timer(cb, when, interval);
+    std::shared_ptr<Timer> timer = std::make_shared<Timer>(cb, when, interval);
 
     // 这样能让最后TimerQueue::AddTimerInLoop()函数最后在IO线程的Event::Loop()循环中
     // 执行DoPendingFunctors()函数调用。。。DoPendingFunctors()函数只可能由IO线程调用
@@ -93,7 +93,7 @@ TimerId TimerQueue::AddTimer(const TimerCallback &cb, Timestamp when, double int
     return TimerId(timer);
 }
 
-void TimerQueue::AddTimerInLoop(Timer *timer)
+void TimerQueue::AddTimerInLoop(std::shared_ptr<Timer> timer)
 {
     loop_->AssertInLoopThread();
 
@@ -129,7 +129,7 @@ void TimerQueue::HandleRead()
 std::vector<TimerQueue::Entry> TimerQueue::GetExpired(Timestamp now)
 {
     std::vector<Entry> expired;
-    Entry sentry = std::make_pair(now, reinterpret_cast<Timer *>(UINTPTR_MAX));
+    Entry sentry = std::make_pair(now, timers_.begin()->second);
     // 因为set中是升序排列，取到左起第一个大于当前时间的定时器的迭代器
     TimerList::iterator it = timers_.lower_bound(sentry);
     // 如果迭代器指向的定时器对象的时间比当前时间晚，或者迭代器指到了队列尾，都是符合条件的
@@ -160,8 +160,6 @@ void TimerQueue::Reset(const std::vector<Entry> &expired, Timestamp now)
             // 并插入到队列里面
             Insert(it->second);
         }
-        else // 否则将这个定时器删除，因为不可复用
-            delete it->second;
     }
     // 如果定时器队列不为空，则获取到最早的定时器队列响应时间
     if (!timers_.empty())
@@ -173,7 +171,7 @@ void TimerQueue::Reset(const std::vector<Entry> &expired, Timestamp now)
 
 
 // 将新的定时器插入到队列中
-bool TimerQueue::Insert(Timer *timer)
+bool TimerQueue::Insert(std::shared_ptr<Timer> timer)
 {
     // 标记插入到新的定时器到期时间是不是最早的
     bool EarliestChanged = false;
