@@ -1,56 +1,78 @@
-#include "EventLoop.h"
 #include <cstdio>
-#include <thread>
+#include "EventLoop.h"
+#include "InetAddress.h"
+#include "TcpServer.h"
 
-int cnt = 0;
-EventLoop *g_loop;         // 全局EventLoop指针，用于在外线程控制EventLoop对象退出
+/*--------------------------------------------多线程版本---------------------------------------------------*/
 
-// 打印当前线程ID和时间
-void PrintId()
+std::string msg;
+
+void OnConnection(const TcpConnectionPtr &conn)
 {
-//    printf("pid = %d, tid = %d\n", getpid(), std::this_thread::get_id());
-    printf("now %s\n", Timestamp::now().toString().c_str());
+    if (conn->Connected())
+    {
+        printf("OnConnection(): {tid = %d} new connection [%s] from %s\n", std::this_thread::get_id(),
+               conn->GetName().c_str(),
+               conn->GetPeerAddress().ToHostPort().c_str());
+        conn->Send(msg);
+    } else
+    {
+        printf("OnConnection(): {tid = %d} connection [%s] is down\n", std::this_thread::get_id(),
+               conn->GetName().c_str());
+    }
 }
 
-// 随着定时器传入loop的函数
-void Print(const char *msg)
+void OnWriteComplete(const TcpConnectionPtr &conn)
 {
-    // 打印传入的时间和消息
-    printf("%d:\nmsg %s %s\n", cnt + 1, Timestamp::now().toString().c_str(), msg);
-    // 如果回调函数触发了20次
-    if (++cnt == 20)
-    {
-        g_loop->Quit();
-    }
+    conn->Send(msg);
+    printf(" {tid = %d} OnWriteComplete\n", std::this_thread::get_id());
+}
+
+/*
+ * 这个write_complete__callback_ = nullptr;非常重要！！！！！！
+ * 陈硕大佬的书中没有讲这个问题，没有上面这句，会陷入死循环。可以跟踪一下整个调用过程。
+ * 系统调用write_complete__callback_，也就是chargen服务器中的OnWriteComplete()
+ * OnWriteComplete()中继续调用TcpConnection::Send()，然后又会回到这里把write_complete__callback_放入到
+ * 队列里，于是用户传入的OnWriteComplete()会继续执行，又会调用TcpConnection::Send()。。。。
+ * 陷入了死循环。。。。
+ *
+ * */
+
+void OnMessage(const TcpConnectionPtr &conn,
+               Buffer *data,
+               Timestamp recv_time)
+{
+    std::string recv = data->RetrieveAsString();
+    printf("OnMessage(): {tid = %d} received %zd bytes from connection [%s] at %s\n", std::this_thread::get_id(),
+           data->ReadableBytes(), conn->GetName().c_str(), recv_time.toFormattedString().c_str());
+    printf("OnMessage: {tid = %d} [%s]\n", std::this_thread::get_id(), recv.substr(0, recv.length() - 1).c_str());
 }
 
 int main()
 {
-    // 打印当前线程ID和时间
-    PrintId();
-    EventLoop loop;
-    g_loop = &loop;
+    printf("test11: pid = %d\n", getpid());
 
-    // 开始注册定时器事件
-    printf("test4\n\n");
-    // 1秒后触发回调函数
-    loop.RunAfter(1, std::bind(Print, "once1"));
-    // 1.5秒后触发回调函数
-    loop.RunAfter(1.5, std::bind(Print, "once1.5"));
-    // 2.5秒后触发回调函数
-    loop.RunAfter(2.5, std::bind(Print, "once2.5"));
-    // 3.5秒后触发回调函数
-    loop.RunAfter(3.5, std::bind(Print, "once3.5"));
-    // 每2秒触发回调函数
-    loop.RunEvery(2, std::bind(Print, "every2"));
-    // 每3秒触发回调函数
-    loop.RunEvery(3, std::bind(Print, "every3"));
+    std::string line;
+
+    for (int i = 33; i < 127; i++)
+        line.push_back(static_cast<char>(i));
+
+    line += line;
+
+    for (size_t i = 0; i < 127-33; ++i)
+        msg += line.substr(i, 72) + "\n";
+
+    InetAddress listen_addr(2333);
+    EventLoop loop;
+
+    TcpServer server(&loop, listen_addr);
+    server.SetConnCallback(OnConnection);
+    server.SetMsgCallback(OnMessage);
+    server.SetWriteCompleteCallback(OnWriteComplete);
+    server.SetThreadNum(4);
+    server.Start();
 
     loop.Loop();
-
-    printf("main loop exits");
-
-    sleep(1);
 
     return 0;
 }

@@ -58,6 +58,7 @@ public:
     bool IsWriting() const { return events_ & k_write_event; }
 
     // Poller中要调用的函数，返回当前channel在Poller映射表中的位置
+    // index在Epoller中表示的是
     int GetIndex() { return index_; }
     void SetIndex(int idx) { index_ = idx; }
 
