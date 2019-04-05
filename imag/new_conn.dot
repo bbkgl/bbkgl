@@ -1,0 +1,49 @@
+digraph G {
+	edge[fontname = "FangSong"];
+	node[peripheries = 2, fontname = "FangSong"];
+	size = "1000, 1000";
+
+	/*--------------------------结点初始化--------------------------*/
+	// 对象结点
+	TcpServer[shape = box];
+	ThreadPool[shape = box];
+	TcpConnection[shape = box];
+	Epoller[shape = box];
+	Channel[shape = box];
+
+	// 函数结点
+	HandleEvent[label = "Channel::\nHandleEvent()"];
+	HandleRead[label = "Acceptor::HandleRD"];
+	NewConnection[label = "TcpServer::NewConn"];
+	TcpConnectionCon[label = "TcpConn构造函数"];
+	EnableReading[label = "Channel::\nEnableRD()"];
+	Poll[label = "Epoller::Poll()"];
+	ConnEst[label = "TcpConnection::\nConnEstablished()"];
+	HandleReadConn[label = "TcpConnection::\nHandleRead()"];
+	HandleCloseConn[label = "TcpConnection::\nHandleClose()"];
+	HandleErrorConn[label = "TcpConnection::\nHandleError()"];
+	HandleWriteConn[label = "TcpConnection::\nHandleWrite()"];
+
+
+	// 其他结点
+	New[label = "新连接", shape = polygon,sides = 5,peripheries = 3,color = lightblue,style = filled];
+
+
+	/*--------------------------边的绘制----------------------------*/
+	// 从属关系
+	Epoller -> events_[label = "注册epoll_event"];
+	Epoller -> channels_[label = "从fd->channel\n的映射"];
+
+	// 新连接函数调用过程
+	New -> Poll -> HandleEvent -> HandleRead -> NewConnection -> TcpConnectionCon -> TcpConnection;
+	ThreadPool -> TcpConnection[label = "分配线程\n分配EventLoop"];
+
+	// 新连接注册过程
+	TcpConnection -> TcpServer[label = "新连接注册"];
+	TcpServer -> NewConnection  -> ConnEst -> EnableReading;
+	EnableReading -> Epoller[label = "新Channel注册"];
+
+	// 回调函数传递
+	TcpConnection -> {HandleReadConn, HandleCloseConn, HandleErrorConn, HandleWriteConn} -> Channel;
+	Channel -> HandleCallbacks[label = "回调函数"];
+}

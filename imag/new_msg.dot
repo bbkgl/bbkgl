@@ -1,0 +1,47 @@
+digraph G {
+	edge[fontname = "FangSong"];
+	node[peripheries = 2, fontname = "FangSong"];
+	size = "1000, 1000";
+
+	/*--------------------------结点初始化--------------------------*/
+	// 对象结点
+	Epoller[shape = box];
+
+	// 函数结点
+	HandleEvent[label = "Channel::\nHandleEvent()"];
+	Poll[label = "Epoller::Poll()"];
+	HandleReadConn[label = "TcpConnection::\nHandleRead()"];
+	HandleCloseConn[label = "TcpConnection::\nHandleClose()"];
+	HandleErrorConn[label = "TcpConnection::\nHandleError()"];
+	HandleWriteConn[label = "TcpConnection::\nHandleWrite()"];
+	ReadFd[label = "Buffer::ReadFd()"];
+	Send[label = "TcpConnection::Send()"];
+	SendInLoop[label = "TcpConnection::\nSendInLoop()"];
+	Append[label = "Buffer::Append()"];
+	EnableWriting[label = "Channel::\nEnableWrt()"];
+
+	// 其他结点
+	New[label = "新消息", shape = polygon,sides = 5,peripheries = 3,color = lightblue,style = filled];
+	Finish[label = "发送完成", shape = polygon,sides = 5,peripheries = 3,color = lightblue,style = filled];
+
+
+	/*--------------------------边的绘制----------------------------*/
+	// 从属关系
+	Epoller -> events_[label = "注册epoll_event"];
+	Epoller -> channels_[label = "从fd->channel\n的映射"];
+
+	// 新消息接收函数调用过程
+	New -> Poll -> HandleEvent -> HandleReadConn;
+	HandleReadConn -> ReadFd[label = "接收消息", weight = 20];
+	HandleReadConn -> HandleCloseConn;
+	HandleReadConn -> HandleErrorConn;
+
+	// 给客户端发送消息
+	Send -> SendInLoop;
+	SendInLoop -> Finish[label = "一次性\n发送完成"];
+	SendInLoop -> Append[label = "一次性未\n发送完"];
+	SendInLoop -> EnableWriting[label = "一次性未\n发送完"];
+	EnableWriting -> Epoller[label = "修改关注\n事件类型"];
+	SendInLoop -> Poll[label = "一次性未\n发送完"];
+	HandleEvent -> HandleWriteConn -> Finish;
+}
