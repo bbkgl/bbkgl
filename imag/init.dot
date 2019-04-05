@@ -1,0 +1,38 @@
+digraph G {
+	edge[fontname = "FangSong"];
+	node[peripheries = 2, fontname = "FangSong"];
+	size = "1000, 1000";
+
+	/*--------------------------结点初始化--------------------------*/
+	// 对象结点
+	TcpServer[shape = box];
+	ThreadPool[shape = box];
+	Acceptor[shape = box];
+	Channel[shape = box];
+	EventLoop[shape = box];
+	//TcpConnection[shape = box];
+	Epoller[shape = box];
+	// 函数结点
+	//HandleEvent;
+	//HandleRead;
+	//NewConnection;
+	//TcpConnection;
+	//Channel;
+	Listen[label = "Acceptor::\nListen()"];
+	EnableReading[label = "Channel::\nEnableRD()"];
+	Start[label = "TcpServer::Start"];
+
+	/*--------------------------边的绘制----------------------------*/
+	// 回调函数传递
+	TcpServer -> Acceptor[label = "NewConn()", style = dotted];
+	Acceptor -> Channel[label = "HandleRead()\n{NewConn()}", style = dotted];
+	
+	// 类之间的所属从属关系
+	TcpServer -> {ThreadPool, Acceptor, EventLoop}[style = bold, color = "red", weight = 500];
+	EventLoop -> {Epoller, Channel}[style = bold, color = "red"];
+
+	// 一些初始化调用
+	TcpServer -> Start -> Listen[label = "函数调用"];
+	Acceptor -> Listen -> EnableReading[label = "函数调用"];
+	EnableReading -> Epoller[label = "accept_channel\n注册"]
+}
