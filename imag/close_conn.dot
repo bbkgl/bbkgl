@@ -1,0 +1,49 @@
+digraph G {
+	edge[fontname = "FangSong"];
+	node[peripheries = 2, fontname = "FangSong"];
+	size = "1000, 1000";
+
+	/*--------------------------结点初始化--------------------------*/
+	// 对象结点
+	Epoller[shape = box];
+	TcpServer[shape = box];
+	connections_[shape = box];
+	events_[shape = box];
+	channels_[shape = box];
+
+	// 函数结点
+	HandleEvent[label = "Channel::\nHandleEvent()"];
+	Poll[label = "Epoller::Poll()"];
+	HandleReadConn[label = "TcpConnection::\nHandleRead()"];
+	HandleCloseConn[label = "TcpConnection::\nHandleClose()"];
+	DisableAll[label = "Channel::DisableAll()"];
+	UpdateChannel[label = "Epoller::UpdateChannel()"];
+	Update[label = "Epoller::Update()"];
+	RemoveConn[label = "TcpServer::\nRemoveConnection"];
+	RemoveConnInLoop[label = "TcpServer::\nRmConnInLoop()"];
+	Destroyed[label = "TcpConnection::\nConnDestroyed()"];
+	RmChnlLoop[label = "EventLoop::\nRemoveChannel()"];
+	RmChnlEpoller[label = "Epoller::\nRemoveChannel()"];
+
+	// 其他结点
+	New[label = "新消息", shape = polygon,sides = 5,peripheries = 3,color = lightblue,style = filled];
+	Finish[label = "断开连接", shape = polygon,sides = 5,peripheries = 3,color = lightblue,style = filled];
+
+
+	/*--------------------------边的绘制----------------------------*/
+	// 从属关系
+	Epoller -> events_[label = "注册epoll_event"];
+	Epoller -> channels_[label = "从fd->channel\n的映射"];
+	TcpServer -> connections_[label = "name->conns_\n的映射"];
+
+	// 新消息接收函数调用过程
+	New -> Poll -> HandleEvent -> HandleReadConn;
+	HandleReadConn -> HandleCloseConn -> DisableAll -> UpdateChannel;
+	UpdateChannel -> Update[label = "EPOLL_CTL_DEL"];
+	Update -> events_[label = "EPOLL_CTL_DEL"];
+	HandleCloseConn -> RemoveConn -> RemoveConnInLoop -> connections_[label = "删除映射"];
+	connections_ -> Finish;
+	RemoveConnInLoop -> Destroyed -> RmChnlLoop -> RmChnlEpoller -> channels_[label = "删除映射"];
+	channels_ -> Finish;
+	events_ -> Finish;
+}

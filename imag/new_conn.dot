@@ -23,7 +23,7 @@ digraph G {
 	HandleCloseConn[label = "TcpConnection::\nHandleClose()"];
 	HandleErrorConn[label = "TcpConnection::\nHandleError()"];
 	HandleWriteConn[label = "TcpConnection::\nHandleWrite()"];
-
+	RemoveConn[label = "TcpServer::\nRemoveConnection"];
 
 	// 其他结点
 	New[label = "新连接", shape = polygon,sides = 5,peripheries = 3,color = lightblue,style = filled];
@@ -36,7 +36,7 @@ digraph G {
 
 	// 新连接函数调用过程
 	New -> Poll -> HandleEvent -> HandleRead -> NewConnection -> TcpConnectionCon -> TcpConnection;
-	ThreadPool -> TcpConnection[label = "分配线程\n分配EventLoop"];
+	ThreadPool -> TcpConnectionCon[label = "分配线程\n分配EventLoop"];
 
 	// 新连接注册过程
 	TcpConnection -> TcpServer[label = "新连接注册"];
@@ -44,6 +44,9 @@ digraph G {
 	EnableReading -> Epoller[label = "新Channel注册"];
 
 	// 回调函数传递
-	TcpConnection -> {HandleReadConn, HandleCloseConn, HandleErrorConn, HandleWriteConn} -> Channel;
-	Channel -> HandleCallbacks[label = "回调函数"];
+	TcpConnection -> {HandleReadConn, HandleCloseConn, HandleErrorConn, HandleWriteConn}[style = dotted, label = "回调函数注册"];
+	{HandleReadConn, HandleCloseConn, HandleErrorConn, HandleWriteConn} -> Channel[style = dotted, label = "回调函数注册"];
+	Channel -> HandleCallbacks[style = dotted, label = "回调函数注册"];
+	TcpServer -> RemoveConn[style = dotted, label = "回调函数注册"];
+	RemoveConn -> TcpConnection[style = dotted, label = "回调函数注册"];
 }

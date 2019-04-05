@@ -6,33 +6,36 @@ digraph G {
 	/*--------------------------结点初始化--------------------------*/
 	// 对象结点
 	TcpServer[shape = box];
-	ThreadPool[shape = box];
 	Acceptor[shape = box];
-	Channel[shape = box];
 	EventLoop[shape = box];
-	//TcpConnection[shape = box];
 	Epoller[shape = box];
+	events_[shape = box];
+	channels_[shape = box];
+	accept_channel_[shape = box];
+
 	// 函数结点
-	//HandleEvent;
-	//HandleRead;
-	//NewConnection;
-	//TcpConnection;
-	//Channel;
 	Listen[label = "Acceptor::\nListen()"];
 	EnableReading[label = "Channel::\nEnableRD()"];
-	Start[label = "TcpServer::Start"];
+	Start[label = "TcpServer::Start()"];
+	NewConnection[label = "TcpServer::NewConn()"];
+	HandleRead[label = "Acceptor::HandleRD()"];
 
 	/*--------------------------边的绘制----------------------------*/
-	// 回调函数传递
-	TcpServer -> Acceptor[label = "NewConn()", style = dotted];
-	Acceptor -> Channel[label = "HandleRead()\n{NewConn()}", style = dotted];
+	// 回调函数注册
+	TcpServer -> NewConnection[style = dotted, label = "注册回调"]; 
+	NewConnection  -> Acceptor[style = dotted, label = "注册回调"];
+	Acceptor -> HandleRead[style = dotted, label = "注册回调"];
+	HandleRead -> accept_channel_[style = dotted, label = "注册回调"];
 	
 	// 类之间的所属从属关系
-	TcpServer -> {ThreadPool, Acceptor, EventLoop}[style = bold, color = "red", weight = 500];
-	EventLoop -> {Epoller, Channel}[style = bold, color = "red"];
+	EventLoop -> Epoller;
+	Epoller -> events_[label = "注册epoll_event"];
+	Epoller -> channels_[label = "从fd->channel\n的映射"];
+	TcpServer -> Acceptor;
+	Acceptor -> accept_channel_;
 
 	// 一些初始化调用
-	TcpServer -> Start -> Listen[label = "函数调用"];
-	Acceptor -> Listen -> EnableReading[label = "函数调用"];
-	EnableReading -> Epoller[label = "accept_channel\n注册"]
+	TcpServer -> Start -> Listen;
+	Listen -> EnableReading -> accept_channel_[label = "注册"];
+	accept_channel_ -> Epoller[label = "注册channel"];
 }
