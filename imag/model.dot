@@ -1,0 +1,37 @@
+digraph g{
+	edge[fontname = "FangSong"];
+	node[peripheries = 1, fontname = "FangSong"];
+	size = "1000, 1000"
+
+	// 客户端结点
+	client[ label = "客户端\n请求连接", center = true, shape = polygon, sides = 5, peripheries = 3, color = lightblue, style = filled];
+	// 主线程结点
+	loop0[label = "主线程\nEventLoop0", shape = box, fontsize = "18", ];
+	// Acceptor结点
+	Acceptor[shape = box];
+
+	subgraph cluster0{
+		node[shape = box, peripheries = 1, fontname = "FangSong"];
+		style = filled;
+		color = yellow;
+
+		// 结点信息
+		loop1[label = "线程1\nEventLoop1"];
+		loop2[label = "线程2\nEventLoop2"];
+		loop3[label = "线程3\nEventLoop3"];
+		loop4[label = "线程4\nEventLoop4"];
+			
+		// 线程池名字
+		label = "线程池";
+		fontname = "FangSong";
+		fontsize = 20;
+	}
+
+	// 边
+	client -> Acceptor[label = "请求连接"];
+	Acceptor -> loop0[label = "接受连接"];
+	loop0 -> loop1[label = "分配连接\nRound-robin"];
+	loop0 -> loop2[style = dotted];
+	loop0 -> loop3[style = dotted];
+	loop0 -> loop4[style = dotted];
+}
