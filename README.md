@@ -79,7 +79,7 @@ bbkgl是一个仿照muduo(木铎)网络库实现的基于Reactor模式以及非�
 
 ![imag](imag/new_msg.png)
 
-收发消息就比较简单了，主要是Buffer类的使用，流程图中说的比较清除了。
+收发消息就比较简单了，主要是Buffer类的使用，流程图中说的比较清楚了。
 
 这里要说的一点是，回复消息这件事是由用户来注册函数完成的，也就是说用户需要注册一个函数到TcpConnection对象中，该函数需要调用TcpConnection::Send()函数，TcpConnection对象中会调用用户调用的回调函数完成消息的收发。而回调函数注册的过程已经在“2.接收新连接”中介绍了，也就是用户只要把函数注册进TcpServer对象中就行了。
 
@@ -98,9 +98,11 @@ example中的echo服务器并没有实现主动断开连接的过程，这里主
 
 上述第二件事和第三件事在完成过程中联系很大，TcpConnection对象在TcpServer中删除映射后，就失去了指向本对象的一个智能指针，这时候引用计数只剩下1，也就是在TcpServer::RemoveConnection()函数中的一个临时智能指针还在指向TcpConnection对象，当TcpServer::RemoveConnection()执行完以后，TcpConnection对象的引用计数为0，会调用其析构函数，同时会先调用其成员`TcpConnection::channel_`的析构函数，这也就导致了之前的Channel::HandleEvent()函数还没执行完，其所在的对象就被析构了，这个问题困扰了我很久。
 
-最后的解决办法是：将TcpServer::RemoveConnection()函数中临时智能指针和TcpConnection::ConnDestroyed()函数绑定到EventLoop::QueueInLoop()中执行，这样就会一直有一个只能指针指向TcpConnection对象，最后会先把Channel::HandleEvent()函数执行完，再执行TcpConnection::ConnDestroyed()函数，避免了对象被提前析构的问题。
+最后的解决办法是：将TcpServer::RemoveConnection()函数中临时智能指针和TcpConnection::ConnDestroyed()函数绑定到EventLoop::QueueInLoop()中执行，这样就会一直有一个智能指针指向TcpConnection对象，最后会先把Channel::HandleEvent()函数执行完，再执行TcpConnection::ConnDestroyed()函数，避免了对象被提前析构的问题。
 
 ## More
+
+截至2019.04.06, 历时整整31天，网络库的编写基本完成。
 
 网络库还有很多要完善的地方：
 
@@ -113,4 +115,4 @@ example中的echo服务器并没有实现主动断开连接的过程，这里主
 
 ## Contact
 
-email: zoujk@cumt.edu.cn
+Email: zoujk@cumt.edu.cn
