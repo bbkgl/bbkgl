@@ -43,6 +43,8 @@ public:
     void Send(const std::string &message);
     // 优雅关闭连接
     void Shutdown();
+    // 服务端主动断开连接，用于处理超时连接
+    void Close(int timeout);
     // 关闭Nagle算法，降低延迟
     void SetTcpNoDelay(bool on);
 

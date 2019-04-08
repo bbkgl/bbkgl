@@ -5,8 +5,8 @@ HttpServer::HttpServer(EventLoop *loop, int port, int thread_num) :
     server_(loop, *(new InetAddress(port)))
 {
     server_.SetThreadNum(thread_num);
-    server_.SetConnCallback(std::bind(HttpServer::OnConnection, this));
-    server_.SetConnCallback(std::bind(HttpServer::OnMessage, this));
+    server_.SetConnCallback(std::bind(&HttpServer::OnConnection, this));
+    server_.SetConnCallback(std::bind(&HttpServer::OnMessage, this));
 }
 
 void HttpServer::Start()

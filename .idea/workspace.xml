@@ -25,64 +25,13 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/example/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="166">
-              <caret line="9" column="21" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="21" />
+            <state relative-caret-position="493">
+              <caret line="17" column="14" lean-forward="true" selection-start-line="17" selection-start-column="14" selection-end-line="17" selection-end-column="14" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TcpServer.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/TcpServer.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-920">
-              <caret line="20" column="38" lean-forward="true" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TcpConnection.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/TcpConnection.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="386">
-              <caret line="226" column="37" selection-start-line="226" selection-start-column="21" selection-end-line="226" selection-end-column="37" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TcpConnection.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/TcpConnection.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="377">
-              <caret line="76" column="23" lean-forward="true" selection-start-line="76" selection-start-column="23" selection-end-line="76" selection-end-column="23" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HttpServer.h" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/http/HttpServer.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="464">
-              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
-              <folding>
-                <element signature="e#55#77#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HttpServer.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/http/HttpServer.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="174">
-              <caret line="18" selection-start-line="18" selection-end-line="18" />
-              <folding>
-                <element signature="e#38#61#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -119,7 +68,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/test/test3.cpp" />
         <option value="$PROJECT_DIR$/Buffer.cpp" />
         <option value="$PROJECT_DIR$/Acceptor.cpp" />
         <option value="$PROJECT_DIR$/Channel.h" />
@@ -148,12 +96,10 @@
         <option value="$PROJECT_DIR$/test/test8_3.cpp" />
         <option value="$PROJECT_DIR$/test/test11_1.cpp" />
         <option value="$PROJECT_DIR$/build.sh" />
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/.travis.yml" />
         <option value="$PROJECT_DIR$/src/base/Socket.h" />
         <option value="$PROJECT_DIR$/src/net/Poller.h" />
         <option value="$PROJECT_DIR$/src/net/TcpServer.h" />
-        <option value="$PROJECT_DIR$/src/net/TcpConnection.h" />
         <option value="$PROJECT_DIR$/src/net/EventLoopThreadPool.h" />
         <option value="$PROJECT_DIR$/src/net/EventLoopThread.h" />
         <option value="$PROJECT_DIR$/README.md" />
@@ -166,10 +112,13 @@
         <option value="$PROJECT_DIR$/src/net/EventLoop.cpp" />
         <option value="$PROJECT_DIR$/src/net/EventLoop.h" />
         <option value="$PROJECT_DIR$/src/net/Epoller.cpp" />
-        <option value="$PROJECT_DIR$/example/main.cpp" />
         <option value="$PROJECT_DIR$/src/http/HTTPServer.h" />
         <option value="$PROJECT_DIR$/src/http/HTTPServer.cpp" />
+        <option value="$PROJECT_DIR$/src/net/TcpConnection.h" />
+        <option value="$PROJECT_DIR$/example/main.cpp" />
+        <option value="$PROJECT_DIR$/src/net/TcpConnection.cpp" />
         <option value="$PROJECT_DIR$/src/http/HttpServer.cpp" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
       </list>
     </option>
   </component>
@@ -204,24 +153,7 @@
             <path>
               <item name="bbkgl" type="b2602c69:ProjectViewProjectNode" />
               <item name="bbkgl" type="462c0819:PsiDirectoryNode" />
-              <item name="example" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bbkgl" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bbkgl" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bbkgl" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bbkgl" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="http" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bbkgl" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bbkgl" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="net" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -398,12 +330,12 @@
       <workItem from="1554562849935" duration="1315000" />
       <workItem from="1554642300003" duration="599000" />
       <workItem from="1554692443529" duration="1010000" />
-      <workItem from="1554716939967" duration="5001000" />
+      <workItem from="1554716939967" duration="7150000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="238119000" />
+    <option name="totallyTimeSpent" value="240268000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -420,11 +352,11 @@
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18581259" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32899022" />
-      <window_info anchor="bottom" id="Messages" order="7" weight="0.9033659" />
+      <window_info anchor="bottom" id="Messages" order="7" weight="0.567861" />
       <window_info anchor="bottom" id="CMake" order="7" weight="0.32899022" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32899022" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.29098806" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.24972856" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -458,19 +390,9 @@
           <option name="timeStamp" value="98" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/net/TimerQueue.cpp</url>
-          <line>141</line>
-          <option name="timeStamp" value="99" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/test/test11.cpp</url>
           <line>71</line>
           <option name="timeStamp" value="100" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/example/main.cpp</url>
-          <line>16</line>
-          <option name="timeStamp" value="112" />
         </line-breakpoint>
       </breakpoints>
       <option name="time" value="113" />
@@ -631,13 +553,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="10" column="25" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/net/TimerId.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="319">
@@ -687,13 +602,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/test3.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1007">
-          <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/test5_1.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-617" />
@@ -704,13 +612,6 @@
         <state relative-caret-position="-1218" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/test4.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="36" column="31" lean-forward="true" selection-start-line="36" selection-start-column="31" selection-end-line="36" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/net/Poller.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="261">
@@ -718,27 +619,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/TimerQueue.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-175">
-          <caret line="141" selection-start-line="141" selection-end-line="141" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/include/x86_64-linux-gnu/bits/errno.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="134">
           <caret line="53" column="14" selection-start-line="53" selection-start-column="14" selection-end-line="53" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/EventLoop.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2159">
-          <caret line="13" column="14" lean-forward="true" selection-start-line="13" selection-start-column="14" selection-end-line="13" selection-end-column="14" />
         </state>
       </provider>
     </entry>
@@ -812,44 +696,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/base/Callbacks.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="15" column="73" selection-start-line="15" selection-start-column="73" selection-end-line="15" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/test11_1.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-812">
           <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="9" column="21" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/http/HttpServer.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
-          <folding>
-            <element signature="e#38#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/TcpServer.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-920">
-          <caret line="20" column="38" lean-forward="true" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
         </state>
       </provider>
     </entry>
@@ -867,26 +717,97 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/TcpConnection.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="386">
-          <caret line="226" column="37" selection-start-line="226" selection-start-column="21" selection-end-line="226" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/TcpConnection.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="76" column="23" lean-forward="true" selection-start-line="76" selection-start-column="23" selection-end-line="76" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/http/HttpServer.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="464">
           <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
           <folding>
             <element signature="e#55#77#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/TcpServer.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-920">
+          <caret line="20" column="38" lean-forward="true" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test3.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/test4.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="36" column="31" lean-forward="true" selection-start-line="36" selection-start-column="31" selection-end-line="36" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/TimerQueue.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-725">
+          <caret line="47" column="69" selection-start-line="47" selection-start-column="44" selection-end-line="47" selection-end-column="69" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/TcpConnection.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="116">
+          <caret line="46" column="26" selection-start-line="46" selection-start-column="26" selection-end-line="46" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/EventLoop.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="42" column="49" selection-start-line="42" selection-start-column="41" selection-end-line="42" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/base/Callbacks.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="290">
+          <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/http/HttpServer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="15" column="25" selection-start-line="15" selection-start-column="25" selection-end-line="15" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/TcpConnection.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6177">
+          <caret line="223" column="17" lean-forward="true" selection-start-line="223" selection-start-column="17" selection-end-line="223" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="17" column="14" lean-forward="true" selection-start-line="17" selection-start-column="14" selection-end-line="17" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>

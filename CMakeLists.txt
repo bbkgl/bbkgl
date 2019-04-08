@@ -13,7 +13,7 @@ set(INSTALL_PATH_LIB lib)
 set(INSTALL_PATH_INCLUDE include)
 
 
-set(SRC_LIST "base" "net" "http")
+set(SRC_LIST "base" "net")
 
 foreach(SUB_DIR ${SRC_LIST})
     include_directories(${PROJECT_SOURCE_DIR}/src/${SUB_DIR})

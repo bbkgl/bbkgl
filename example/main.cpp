@@ -15,6 +15,7 @@ void OnMessage(const TcpConnectionPtr &conn, Buffer *msg, Timestamp when)
     std::string s = msg->RetrieveAsString();
     std::cout << s << std::endl;
     conn->Send(s);
+    conn->Close(5);
 }
 
 int main()

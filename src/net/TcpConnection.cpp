@@ -228,6 +228,11 @@ void TcpConnection::HandleClose()
 
 }
 
+void TcpConnection::Close(int timeout)
+{
+    loop_->RunAfter(timeout, std::bind(&TcpConnection::HandleClose, this));
+}
+
 void TcpConnection::HandleError()
 {
     // 获取错误信息
